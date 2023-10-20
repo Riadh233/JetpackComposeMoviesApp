@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">JetpackCompose Training</string>
+    <string name="profie_image">Image profile\n</string>
+    <string name="good_morning">Good Morning !</string>
+    <string name="profile_name">Profile Name</string>
+    <string name="notification_bell">notification bell\n</string>
+    <string name="header_image">header image\n</string>
+    <string name="find_your">Find Your</string>
+    <string name="fav_movie">Favorite Movie!</string>
+    <string name="desc_oppenheimer">Oppenheimer (2023) is a biographical thriller about the life of J. Robert Oppenheimer, the scientist who led the Manhattan Project to develop the atomic bomb. The film explores the moral and ethical implications of Oppenheimer\'s work, and the impact it had on his personal life.</string>
+    <string name="desc">desc</string>
+    <string name="search">Search Movies\n</string>
+    <string name="clear_search_text_icon">clear search text icon\n</string>
+</resources>
