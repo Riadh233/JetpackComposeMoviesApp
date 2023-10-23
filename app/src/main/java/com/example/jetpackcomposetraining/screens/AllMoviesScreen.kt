@@ -14,8 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.jetpackcomposetraining.MainViewModel
-import com.example.jetpackcomposetraining.Screen
+import com.example.jetpackcomposetraining.ui.viewmodels.MainViewModel
 import com.example.jetpackcomposetraining.components.MovieGrid
 import com.example.jetpackcomposetraining.components.SearchBar
 

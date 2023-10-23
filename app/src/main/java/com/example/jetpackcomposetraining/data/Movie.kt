@@ -1,4 +1,4 @@
-package com.example.jetpackcomposetraining
+package com.example.jetpackcomposetraining.data
 
 data class Movie(
     val id : Int,

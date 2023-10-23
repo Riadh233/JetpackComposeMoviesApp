@@ -1,6 +1,4 @@
-package com.example.jetpackcomposetraining
-
-import androidx.compose.ui.graphics.vector.ImageVector
+package com.example.jetpackcomposetraining.navigation
 
 
 sealed class Screen(val route : String){

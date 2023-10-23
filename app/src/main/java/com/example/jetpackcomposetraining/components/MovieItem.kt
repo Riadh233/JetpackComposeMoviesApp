@@ -6,12 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -40,10 +36,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.jetpackcomposetraining.MainViewModel
-import com.example.jetpackcomposetraining.Movie
+import com.example.jetpackcomposetraining.ui.viewmodels.MainViewModel
+import com.example.jetpackcomposetraining.data.Movie
 import com.example.jetpackcomposetraining.R
-import com.example.jetpackcomposetraining.Screen
+import com.example.jetpackcomposetraining.navigation.Screen
+import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
@@ -62,11 +59,11 @@ fun MovieGrid(viewModel: MainViewModel, navController: NavController){
 
 }
 @Composable
-fun MoviesList(viewModel: MainViewModel, navController: NavController){
-    val moviesList by viewModel.movies.collectAsState()
+fun MoviesList(modifier: Modifier = Modifier, moviesList: StateFlow<List<Movie>>, navController: NavController){
+    val movieList by moviesList.collectAsState()
     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)){
-        items(moviesList){movie ->
-            MovieItem(modifier = Modifier.size(height = 180.dp, width = 130.dp), movie = movie, navController = navController)
+        items(movieList){movie ->
+            MovieItem(modifier = modifier, movie = movie, navController = navController)
         }
     }
 

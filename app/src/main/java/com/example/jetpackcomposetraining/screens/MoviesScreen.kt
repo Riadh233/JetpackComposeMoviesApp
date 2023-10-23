@@ -1,30 +1,25 @@
 package com.example.jetpackcomposetraining.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.example.jetpackcomposetraining.MainViewModel
-import com.example.jetpackcomposetraining.Movie
+import com.example.jetpackcomposetraining.ui.viewmodels.MainViewModel
 import com.example.jetpackcomposetraining.R
+import com.example.jetpackcomposetraining.components.ChipsList
 import com.example.jetpackcomposetraining.components.ImageHeader
-import com.example.jetpackcomposetraining.components.MovieGrid
 import com.example.jetpackcomposetraining.components.MoviesList
-import com.example.jetpackcomposetraining.components.SearchBar
 import com.example.jetpackcomposetraining.components.TopBar
 
 @Composable
@@ -33,17 +28,42 @@ fun MoviesScreen(
     viewModel: MainViewModel,
     navController: NavController
 ) {
-    Column(modifier = Modifier.padding(8.dp)) {
+    val scrollState = rememberScrollState()
+    Column(modifier = Modifier
+        .padding(8.dp)
+        .verticalScroll(scrollState)) {
         TopBar(imageResource = R.drawable.subreddit_placeholder)
         Spacer(modifier = modifier.height(16.dp))
         ImageHeader(
             imageList = listOf(
-                R.drawable.thailand,
-                R.drawable.thailand,
-                R.drawable.thailand
+                R.drawable.oppenheimer,
+                R.drawable.oppenheimer,
+                R.drawable.oppenheimer
             )
         )
         Spacer(modifier = modifier.height(16.dp))
-        MoviesList(viewModel = viewModel, navController = navController)
+        ChipsList(viewModel = viewModel)
+        Spacer(modifier = modifier.height(16.dp))
+        MoviesList(
+            modifier = Modifier.size(height = 180.dp, width = 130.dp),
+            moviesList = viewModel.movies,
+            navController = navController
+        )
+        Spacer(modifier = modifier.height(20.dp))
+        Text(
+            text = "Popular Movies",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+
+        )
+        Spacer(modifier = modifier.height(8.dp))
+        MoviesList(
+            modifier = Modifier.size(height = 200.dp, width = 150.dp),
+            moviesList = viewModel.popularMovies,
+            navController = navController
+        )
+
     }
 }
