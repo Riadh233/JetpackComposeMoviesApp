@@ -36,9 +36,9 @@ fun MoviesScreen(
         Spacer(modifier = modifier.height(16.dp))
         ImageHeader(
             imageList = listOf(
-                R.drawable.oppenheimer,
-                R.drawable.oppenheimer,
-                R.drawable.oppenheimer
+                R.drawable.the_dark_knight,
+                R.drawable.inception,
+                R.drawable.guy_ritchie_s_the_covenant
             )
         )
         Spacer(modifier = modifier.height(16.dp))

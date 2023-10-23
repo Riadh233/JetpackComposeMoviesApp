@@ -102,5 +102,5 @@ fun Dot(isSelected: Boolean, modifier: Modifier) {
 @Composable
 @Preview
 fun ImageHeaderPreview() {
-    ImageHeader(imageList = listOf(R.drawable.thailand, R.drawable.thailand, R.drawable.thailand))
+    ImageHeader(imageList = listOf(R.drawable.the_dark_knight, R.drawable.inception, R.drawable.guy_ritchie_s_the_covenant))
 }
