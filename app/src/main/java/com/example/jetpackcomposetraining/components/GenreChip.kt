@@ -38,7 +38,7 @@ fun ChipsList(viewModel: MainViewModel) {
 @Composable
 fun GenreChip(genre : String,
               isSelected : Boolean,
-              onSelectedGenreChanged : (String) -> Unit
+              onSelectedGenreChanged : (String) -> Unit,
               ){
     val transition =
         updateTransition(targetState = isSelected, label = "Category Selection Transition")

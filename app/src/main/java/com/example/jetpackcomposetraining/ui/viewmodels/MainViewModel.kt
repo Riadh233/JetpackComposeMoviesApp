@@ -52,7 +52,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val popularMovies : StateFlow<List<Movie>>
         get() = _popularMovies
 
-    var selectedGenre  = mutableStateOf("")
+    var selectedGenre  = mutableStateOf("All")
 
     fun onSearchTextChanged(text : String){
         _searchText.value = text
@@ -63,6 +63,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
     fun onSelectedGenreChanged(genre : String){
         selectedGenre.value = genre
-        _searchText.value = genre
     }
+
 }

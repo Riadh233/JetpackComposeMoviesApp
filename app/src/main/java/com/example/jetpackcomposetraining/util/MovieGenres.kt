@@ -1,6 +1,7 @@
 package com.example.jetpackcomposetraining.util
 
 enum class MovieGenres(val genre: String) {
+    All("All"),
     Action("Action"),
     Adventure("Adventure"),
     Comedy("Comedy"),
@@ -20,6 +21,7 @@ enum class MovieGenres(val genre: String) {
 
 fun getAllMovieGenres(): List<String> {
     return listOf(
+        "All",
         "Action",
         "Adventure",
         "Comedy",
