@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,13 +45,15 @@ fun TopBar(imageResource : Int,modifier: Modifier = Modifier){
             contentDescription = stringResource(id = R.string.profie_image),
             modifier = modifier
                 .size(50.dp, 50.dp)
-                .clip(CircleShape)
+                .clip(CircleShape),
+            contentScale = ContentScale.FillBounds,
+            alignment = Alignment.Center
         )
         Spacer(modifier = modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = stringResource(id = R.string.good_morning), 
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Medium, 
                 color =Color.Red,
             )   

@@ -21,7 +21,8 @@ import com.example.jetpackcomposetraining.components.SearchBar
 @Composable
 fun AllMoviesScreen(navController : NavController , viewModel : MainViewModel){
     val isSearching by viewModel.isSearching.collectAsState()
-    Column(modifier = Modifier.fillMaxSize().padding(4.dp)) {
+    val moviesList by viewModel.movies.collectAsState()
+    Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
         Spacer(modifier = Modifier.height(4.dp))
         SearchBar(viewModel = viewModel)
         Spacer(modifier = Modifier.height(16.dp))
@@ -30,6 +31,6 @@ fun AllMoviesScreen(navController : NavController , viewModel : MainViewModel){
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
         } else
-            MovieGrid(viewModel = viewModel,navController = navController)
+            MovieGrid(moviesList = moviesList,navController = navController)
     }
 }

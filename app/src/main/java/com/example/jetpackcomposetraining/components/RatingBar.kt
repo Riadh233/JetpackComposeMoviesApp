@@ -29,7 +29,7 @@ fun RatingBar(modifier: Modifier, movie: Movie) {
             Icon(
                 imageVector = Icons.Filled.Star,
                 contentDescription = "Star",
-                tint = if (movie.rating > i) Color.Red else Color.Gray,
+                tint = if (movie.rating > i) Color.Red else Color.White,
                 modifier = modifier
             )
         }

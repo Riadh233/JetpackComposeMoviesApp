@@ -1,5 +1,6 @@
 package com.example.jetpackcomposetraining
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -8,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -47,90 +47,95 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            JetpackComposeTrainingTheme{
-                val viewModel = viewModel<MainViewModel>()
-                val navController = rememberNavController()
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background)
-                ) {
-                    MainScreen(navController = navController, viewModel = viewModel)
-                }
+            JetpackComposeTrainingTheme {
+                MoviesApp()
             }
         }
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(navController: NavHostController,viewModel: MainViewModel) {
+fun MoviesApp() {
+    val viewModel = viewModel<MainViewModel>()
+    val navController = rememberNavController()
     val items = listOf(Screen.MoviesScreen, Screen.AllMoviesScreen)
     val showBottomNavBar = mutableStateOf(true)
-    Scaffold(
-        modifier = Modifier,
-        bottomBar = {
-            if (showBottomNavBar.value) {
-                Log.d("bottom bar","current destination : ${navController.currentDestination?.route}")
-                BottomNavigation(
-                    modifier = Modifier.fillMaxWidth()
-                        .clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp)),
-                    backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                    elevation = 8.dp
-                ) {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-                    items.forEach { screen ->
-                        val selected =
-                            currentDestination?.hierarchy?.any { it.route == screen.route } == true
-                        BottomNavigationItem(
-                            icon = {
-                                Icon(
-                                    if (screen == Screen.MoviesScreen) Icons.Filled.Home else Icons.Filled.Search,
-                                    contentDescription = null,
-                                    tint = if (selected) Color.Red else Color.White
-                                )
-                            },
-                            selected = selected,
-                            onClick = {
-                                navController.navigate(screen.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        Scaffold(
+            modifier = Modifier,
+            bottomBar = {
+                if (showBottomNavBar.value) {
+                    Log.d(
+                        "bottom bar",
+                        "current destination : ${navController.currentDestination?.route}"
+                    )
+                    BottomNavigation(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp)),
+                        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                        elevation = 8.dp
+                    ) {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentDestination = navBackStackEntry?.destination
+                        items.forEach { screen ->
+                            val selected =
+                                currentDestination?.hierarchy?.any { it.route == screen.route } == true
+                            BottomNavigationItem(
+                                icon = {
+                                    Icon(
+                                        if (screen == Screen.MoviesScreen) Icons.Filled.Home else Icons.Filled.Search,
+                                        contentDescription = null,
+                                        tint = if (selected) Color.Red else Color.White
+                                    )
+                                },
+                                selected = selected,
+                                onClick = {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            selectedContentColor = Color.Red
-                        )
+                                },
+                                selectedContentColor = Color.Red
+                            )
+                        }
                     }
                 }
             }
-        }
 
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.MoviesScreen.route,
-            modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.MoviesScreen.route) {
-                MoviesScreen(viewModel = viewModel, navController = navController)
-                showBottomNavBar.value = true
-            }
-            composable(
-                route = Screen.DetailsScreen.route + "/{itemId}",
-                arguments = listOf(
-                    navArgument(name = "itemId") {
-                        type = NavType.IntType
-                    }
-                )) {
-                val itemId = it.arguments?.getInt("itemId")
-                DetailsScreen(viewModel.getMovieById(itemId!!))
-                showBottomNavBar.value = false
-            }
-            composable(Screen.AllMoviesScreen.route) {
-                AllMoviesScreen(navController, viewModel)
-                showBottomNavBar.value = true
+            NavHost(
+                navController = navController,
+                startDestination = Screen.MoviesScreen.route,
+                modifier = Modifier
+            ) {
+                composable(Screen.MoviesScreen.route) {
+                    MoviesScreen(viewModel = viewModel, navController = navController)
+                    showBottomNavBar.value = true
+                }
+                composable(
+                    route = Screen.DetailsScreen.route + "/{itemId}",
+                    arguments = listOf(
+                        navArgument(name = "itemId") {
+                            type = NavType.IntType
+                        }
+                    )) {
+                    val itemId = it.arguments?.getInt("itemId")
+                    DetailsScreen(viewModel.getMovieById(itemId!!))
+                    showBottomNavBar.value = false
+                }
+                composable(Screen.AllMoviesScreen.route) {
+                    AllMoviesScreen(navController, viewModel)
+                    showBottomNavBar.value = true
+                }
             }
         }
     }

@@ -44,8 +44,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
-fun MovieGrid(viewModel: MainViewModel, navController: NavController){
-    val moviesList by viewModel.movies.collectAsState()
+fun MovieGrid(moviesList: List<Movie>, navController: NavController){
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -53,7 +52,7 @@ fun MovieGrid(viewModel: MainViewModel, navController: NavController){
         modifier = Modifier.fillMaxSize()
     ) {
         items(moviesList) { movie ->
-            MovieItem(modifier = Modifier.size(height = 235.dp, width = 160.dp), movie = movie, navController = navController)
+            MovieItem(modifier = Modifier.size(height = 235.dp, width = 170.dp), movie = movie, navController = navController)
         }
     }
 
@@ -66,7 +65,6 @@ fun MoviesList(modifier: Modifier = Modifier, moviesList: StateFlow<List<Movie>>
             MovieItem(modifier = modifier, movie = movie, navController = navController)
         }
     }
-
 }
 
 @Composable
@@ -78,14 +76,13 @@ fun MovieItem(modifier: Modifier = Modifier, movie: Movie, navController: NavCon
     ) {
         Box(modifier = modifier.clickable{
             navController.navigate(Screen.DetailsScreen.route + "/${movie.id}")
-
         }) {
             Image(
                 painter = painterResource(movie.imgUrl),
                 contentDescription = stringResource(id = R.string.header_image),
                 modifier = Modifier
                     .align(Alignment.Center),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.FillBounds
             )
             Column(
                 Modifier
@@ -117,7 +114,6 @@ fun MovieItem(modifier: Modifier = Modifier, movie: Movie, navController: NavCon
 @Composable
 @Preview
 fun MoviesGridPreview(){
-
 }
 
 @Composable

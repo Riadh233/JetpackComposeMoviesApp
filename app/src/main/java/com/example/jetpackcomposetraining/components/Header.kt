@@ -73,7 +73,8 @@ fun MovieImage(image: Int,modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp)),
-        contentScale = ContentScale.Crop
+        contentScale = ContentScale.Crop,
+        alignment = Alignment.Center
     )
 }
 @Composable

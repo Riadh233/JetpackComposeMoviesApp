@@ -32,7 +32,7 @@ fun MoviesScreen(
     Column(modifier = Modifier
         .padding(8.dp)
         .verticalScroll(scrollState)) {
-        TopBar(imageResource = R.drawable.subreddit_placeholder)
+        TopBar(imageResource = R.drawable.profile_img)
         Spacer(modifier = modifier.height(16.dp))
         ImageHeader(
             imageList = listOf(
