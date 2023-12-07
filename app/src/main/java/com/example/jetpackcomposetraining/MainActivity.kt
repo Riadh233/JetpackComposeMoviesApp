@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,17 +36,22 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.jetpackcomposetraining.navigation.Screen
-import com.example.jetpackcomposetraining.screens.AllMoviesScreen
-import com.example.jetpackcomposetraining.screens.DetailsScreen
-import com.example.jetpackcomposetraining.screens.MoviesScreen
+import com.example.jetpackcomposetraining.ui.screens.AllMoviesScreen
+import com.example.jetpackcomposetraining.ui.screens.DetailsScreen
+import com.example.jetpackcomposetraining.ui.screens.MoviesScreen
+import com.example.jetpackcomposetraining.ui.screens.TestScreen
 import com.example.jetpackcomposetraining.ui.theme.JetpackComposeTrainingTheme
 import com.example.jetpackcomposetraining.ui.viewmodels.MainViewModel
+import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val viewModel : MoviesViewModel by viewModels()
             JetpackComposeTrainingTheme {
                 MoviesApp()
             }
@@ -58,6 +63,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MoviesApp() {
     val viewModel = viewModel<MainViewModel>()
+    val moviesViewModel : MoviesViewModel = viewModel()
     val navController = rememberNavController()
     val items = listOf(Screen.MoviesScreen, Screen.AllMoviesScreen)
     val showBottomNavBar = mutableStateOf(true)
@@ -118,7 +124,7 @@ fun MoviesApp() {
                 modifier = Modifier
             ) {
                 composable(Screen.MoviesScreen.route) {
-                    MoviesScreen(viewModel = viewModel, navController = navController)
+                    MoviesScreen(mainViewModel = viewModel,moviesViewModel=moviesViewModel, navController = navController)
                     showBottomNavBar.value = true
                 }
                 composable(

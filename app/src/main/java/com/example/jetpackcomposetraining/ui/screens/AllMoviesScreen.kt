@@ -1,4 +1,4 @@
-package com.example.jetpackcomposetraining.screens
+package com.example.jetpackcomposetraining.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.jetpackcomposetraining.ui.viewmodels.MainViewModel
-import com.example.jetpackcomposetraining.components.MovieGrid
-import com.example.jetpackcomposetraining.components.SearchBar
+import com.example.jetpackcomposetraining.ui.components.MovieGrid
+import com.example.jetpackcomposetraining.ui.components.SearchBar
 
 @Composable
 fun AllMoviesScreen(navController : NavController , viewModel : MainViewModel){

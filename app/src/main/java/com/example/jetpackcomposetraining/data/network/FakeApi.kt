@@ -1,12 +1,13 @@
-package com.example.jetpackcomposetraining.data
+package com.example.jetpackcomposetraining.data.network
 
 import android.content.Context
 import com.example.jetpackcomposetraining.R
+import com.example.jetpackcomposetraining.data.model.FakeMovie
 
 class FakeApi(private val context : Context) {
-    fun getMovies(query: String): List<Movie> {
+    fun getMovies(query: String): List<FakeMovie> {
         val movies = listOf(
-            Movie(
+            FakeMovie(
                 0,
                 "Oppenheimer",
                 context.getString(R.string.desc_oppenheimer),
@@ -16,7 +17,7 @@ class FakeApi(private val context : Context) {
                 "Cristopher Nolan",
                 listOf("Cylian Murphy", "Robert Downey", "Matt Damon")
             ),
-            Movie(
+            FakeMovie(
                 1,
                 "The Shawshank Redemption",
                 context.getString(R.string.shawshank),
@@ -26,7 +27,7 @@ class FakeApi(private val context : Context) {
                 "Cristopher Nolan",
                 listOf("Cylian Murphy", "Cylian Murphy", "Cylian Murphy")
             ),
-            Movie(
+            FakeMovie(
                 2,
                 "Inception",
                 context.getString(R.string.desc_oppenheimer),
@@ -36,7 +37,7 @@ class FakeApi(private val context : Context) {
                 "Cristopher Nolan",
                 listOf("Cylian Murphy", "Cylian Murphy", "Cylian Murphy")
             ),
-            Movie(
+            FakeMovie(
                 3,
                 "The Dark Knight",
                 context.getString(R.string.desc_oppenheimer),
@@ -46,7 +47,7 @@ class FakeApi(private val context : Context) {
                 "Cristopher Nolan",
                 listOf("Cylian Murphy", "Cylian Murphy", "Cylian Murphy")
             ),
-            Movie(
+            FakeMovie(
                 4,
                 "Killers of the Flower Moon",
                 context.getString(R.string.desc_oppenheimer),
@@ -56,7 +57,7 @@ class FakeApi(private val context : Context) {
                 "Cristopher Nolan",
                 listOf("Cylian Murphy", "Cylian Murphy", "Cylian Murphy")
             ),
-            Movie(
+            FakeMovie(
                 5,
                 "Avengers:Infinity War",
                 context.getString(R.string.desc_oppenheimer),
@@ -67,7 +68,7 @@ class FakeApi(private val context : Context) {
                 listOf("Cylian Murphy", "Cylian Murphy", "Cylian Murphy")
             ),
         )
-        val popularMovies = listOf( Movie(
+        val popularMovies = listOf( FakeMovie(
             0,
             "Forrest Gump",
             context.getString(R.string.forrest_gump),
@@ -77,7 +78,7 @@ class FakeApi(private val context : Context) {
             "Robert Zemeckis",
             listOf("Tom Hanks", "Robin Wright", "Winston Groom")
         ),
-            Movie(
+            FakeMovie(
                 1,
                 "The Shawshank Redemption",
                 context.getString(R.string.shawshank),
@@ -87,7 +88,7 @@ class FakeApi(private val context : Context) {
                 "Cristopher Nolan",
                 listOf("Cylian Murphy", "Cylian Murphy", "Cylian Murphy")
             ),
-            Movie(
+            FakeMovie(
                 2,
                 "Inception",
                 context.getString(R.string.desc_oppenheimer),
@@ -97,7 +98,7 @@ class FakeApi(private val context : Context) {
                 "Cristopher Nolan",
                 listOf("Cylian Murphy", "Cylian Murphy", "Cylian Murphy")
             ),
-            Movie(
+            FakeMovie(
                 3,
                 "The Dark Knight",
                 context.getString(R.string.desc_oppenheimer),
@@ -107,7 +108,7 @@ class FakeApi(private val context : Context) {
                 "Cristopher Nolan",
                 listOf("Cylian Murphy", "Cylian Murphy", "Cylian Murphy")
             ),
-            Movie(
+            FakeMovie(
                 4,
                 "Killers of the Flower Moon",
                 context.getString(R.string.desc_oppenheimer),
@@ -117,7 +118,7 @@ class FakeApi(private val context : Context) {
                 "Cristopher Nolan",
                 listOf("Cylian Murphy", "Cylian Murphy", "Cylian Murphy")
             ),
-            Movie(
+            FakeMovie(
                 5,
                 "Avengers:Infinity War",
                 context.getString(R.string.desc_oppenheimer),

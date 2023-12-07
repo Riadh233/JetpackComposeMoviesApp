@@ -1,4 +1,4 @@
-package com.example.jetpackcomposetraining.components
+package com.example.jetpackcomposetraining.ui.components
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.updateTransition

@@ -1,4 +1,4 @@
-package com.example.jetpackcomposetraining.screens
+package com.example.jetpackcomposetraining.ui.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,20 +15,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.jetpackcomposetraining.ui.viewmodels.MainViewModel
 import com.example.jetpackcomposetraining.R
-import com.example.jetpackcomposetraining.components.ChipsList
-import com.example.jetpackcomposetraining.components.ImageHeader
-import com.example.jetpackcomposetraining.components.MoviesList
-import com.example.jetpackcomposetraining.components.TopBar
+import com.example.jetpackcomposetraining.ui.components.ChipsList
+import com.example.jetpackcomposetraining.ui.components.ImageHeader
+import com.example.jetpackcomposetraining.ui.components.MoviesList
+import com.example.jetpackcomposetraining.ui.components.TopBar
+import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
 
 @Composable
 fun MoviesScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel,
+    moviesViewModel: MoviesViewModel,
+    mainViewModel: MainViewModel,
     navController: NavController
 ) {
     val scrollState = rememberScrollState()
+    val allMovies = moviesViewModel.allMovies.collectAsLazyPagingItems()
     Column(modifier = Modifier
         .padding(8.dp)
         .verticalScroll(scrollState)) {
@@ -42,11 +46,11 @@ fun MoviesScreen(
             )
         )
         Spacer(modifier = modifier.height(16.dp))
-        ChipsList(viewModel = viewModel)
+        ChipsList(viewModel = mainViewModel)
         Spacer(modifier = modifier.height(16.dp))
         MoviesList(
             modifier = Modifier.size(height = 180.dp, width = 130.dp),
-            moviesList = viewModel.movies,
+            moviesList = allMovies,
             navController = navController
         )
         Spacer(modifier = modifier.height(20.dp))
@@ -61,7 +65,7 @@ fun MoviesScreen(
         Spacer(modifier = modifier.height(8.dp))
         MoviesList(
             modifier = Modifier.size(height = 200.dp, width = 150.dp),
-            moviesList = viewModel.popularMovies,
+            moviesList = allMovies,
             navController = navController
         )
 

@@ -1,6 +1,10 @@
-package com.example.jetpackcomposetraining.data
+package com.example.jetpackcomposetraining.data.model
 
-data class Movie(
+import androidx.room.Embedded
+import androidx.room.PrimaryKey
+import com.example.jetpackcomposetraining.data.network.Credits
+
+data class FakeMovie(
     val id : Int,
     val title : String,
     val description : String,
@@ -19,3 +23,4 @@ data class Movie(
         }
     }
 }
+

@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.jetpackcomposetraining.data.FakeApi
-import com.example.jetpackcomposetraining.data.Movie
+import com.example.jetpackcomposetraining.data.network.FakeApi
+import com.example.jetpackcomposetraining.data.model.FakeMovie
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,8 +49,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),_movies.value)
 
     private val _popularMovies = MutableStateFlow(getPopularMovies)
-    val popularMovies : StateFlow<List<Movie>>
+    val popularMovies : StateFlow<List<FakeMovie>>
         get() = _popularMovies
+
 
     var selectedGenre  = mutableStateOf("All")
 
@@ -58,7 +59,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _searchText.value = text
     }
 
-    fun getMovieById(itemId: Int): Movie {
+    fun getMovieById(itemId: Int): FakeMovie {
         return moviesList[itemId]
     }
     fun onSelectedGenreChanged(genre : String){

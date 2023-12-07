@@ -1,4 +1,4 @@
-package com.example.jetpackcomposetraining.screens
+package com.example.jetpackcomposetraining.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,15 +33,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.jetpackcomposetraining.data.Movie
+import com.example.jetpackcomposetraining.data.model.FakeMovie
 import com.example.jetpackcomposetraining.R
-import com.example.jetpackcomposetraining.components.RatingBar
+import com.example.jetpackcomposetraining.ui.components.RatingBar
 import com.webtoonscorp.android.readmore.foundation.ReadMoreTextOverflow
 import com.webtoonscorp.android.readmore.foundation.ToggleArea
 import com.webtoonscorp.android.readmore.material3.ReadMoreText
 
 @Composable
-fun DetailsScreen(currentMovie: Movie) {
+fun DetailsScreen(currentMovie: FakeMovie) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -118,7 +118,7 @@ fun DetailsScreen(currentMovie: Movie) {
 }
 
 @Composable
-fun MovieSummary(currentMovie: Movie) {
+fun MovieSummary(currentMovie: FakeMovie) {
     val (expanded, onExpandedChange) = rememberSaveable { mutableStateOf(false) }
     Text(
         text = "Summary",
@@ -171,7 +171,7 @@ fun MovieSummary(currentMovie: Movie) {
 @Composable
 fun DetailsScreenPreview(){
     DetailsScreen(
-        Movie(
+        FakeMovie(
             3,
             "Oppenheimer",
            "short descrip tionxzccc cccccccccc ccc cccccccccccccc csddddddddddd ddddddddddddddd" +

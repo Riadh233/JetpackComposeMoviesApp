@@ -1,4 +1,4 @@
-package com.example.jetpackcomposetraining.components
+package com.example.jetpackcomposetraining.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
