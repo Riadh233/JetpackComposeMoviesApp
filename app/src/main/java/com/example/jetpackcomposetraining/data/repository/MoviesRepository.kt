@@ -5,8 +5,8 @@ import com.example.jetpackcomposetraining.data.model.Movie
 import kotlinx.coroutines.flow.Flow
 
 interface MoviesRepository {
-    fun getDiscoverMovies(genre : Int) : Flow<PagingData<Movie>>
-    fun getPopularMovies() : Flow<PagingData<Movie>>
-    fun searchMovies(searchText : String) : Flow<PagingData<Movie>>
-    fun getMovieById(id:Long) : Movie
+     fun getDiscoverMovies(genre : Int) : Flow<PagingData<Movie>>
+     fun getPopularMovies() : Flow<PagingData<Movie>>
+     fun searchMovies(searchText : String) : Flow<PagingData<Movie>>
+     fun getMovieById(id:Long) : Movie
 }

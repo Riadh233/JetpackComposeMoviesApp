@@ -1,11 +1,13 @@
 package com.example.jetpackcomposetraining.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,8 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,21 +30,21 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.jetpackcomposetraining.data.model.FakeMovie
-import com.example.jetpackcomposetraining.R
 import com.example.jetpackcomposetraining.data.model.Movie
 import com.example.jetpackcomposetraining.navigation.Screen
-import com.example.jetpackcomposetraining.ui.screens.TestItem
-import kotlinx.coroutines.flow.StateFlow
+import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
+import com.example.jetpackcomposetraining.util.Constants.MOVIE_IMAGE_PATH
 
 
 @Composable
@@ -55,9 +55,9 @@ fun MovieGrid(moviesList: List<FakeMovie>, navController: NavController){
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize()
     ) {
-        items(moviesList) { movie ->
-            MovieItem(modifier = Modifier.size(height = 235.dp, width = 170.dp), movie = movie, navController = navController)
-        }
+//        items(moviesList) { movie ->
+//            MovieItem(modifier = Modifier.size(height = 235.dp, width = 170.dp), movie = movie, navController = navController)
+//        }
     }
 
 }
@@ -65,27 +65,24 @@ fun MovieGrid(moviesList: List<FakeMovie>, navController: NavController){
 
 @Composable
 fun MoviesList(modifier: Modifier = Modifier, moviesList: LazyPagingItems<Movie>, navController: NavController){
+    Log.d("tmdb api",moviesList.loadState.toString())
+
     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)){
         items(
             count = moviesList.itemCount,
-            key = {index -> moviesList[index]?.id ?: -1 },
+            key = {index -> moviesList[index]?.id ?: Math.random() },
             contentType = { 0 }
         ){index ->
             val movie = moviesList[index]
             if(movie != null){
-                TestItem(movie = movie)
-            }
-        }
-        item{
-            if(moviesList.loadState.append is LoadState.Loading){
-                CircularProgressIndicator()
+                MovieItem(modifier = modifier,movie = movie, navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun MovieItem(modifier: Modifier = Modifier, movie: FakeMovie, navController: NavController) {
+fun MovieItem(modifier: Modifier = Modifier, movie: Movie, navController: NavController) {
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
@@ -94,9 +91,11 @@ fun MovieItem(modifier: Modifier = Modifier, movie: FakeMovie, navController: Na
         Box(modifier = modifier.clickable{
             navController.navigate(Screen.DetailsScreen.route + "/${movie.id}")
         }) {
-            Image(
-                painter = painterResource(movie.imgUrl),
-                contentDescription = stringResource(id = R.string.header_image),
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current).data(MOVIE_IMAGE_PATH + movie.imageUrl)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = movie.title,
                 modifier = Modifier
                     .align(Alignment.Center),
                 contentScale = ContentScale.FillBounds

@@ -85,7 +85,7 @@ fun DetailsScreen(currentMovie: FakeMovie) {
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
-        RatingBar(modifier = Modifier.size(24.dp), movie = currentMovie)
+//        RatingBar(modifier = Modifier.size(24.dp), movie = currentMovie)
         Spacer(modifier = Modifier.height(16.dp))
         MovieSummary(currentMovie)
         Row(

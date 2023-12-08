@@ -1,6 +1,7 @@
 package com.example.jetpackcomposetraining.di
 
 import com.example.jetpackcomposetraining.data.network.MovieApi
+import com.example.jetpackcomposetraining.util.Constants.BASE_URL
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -40,7 +41,7 @@ object NetworkModel {
 
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(MovieApi.BASE_URL)
+            .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(MovieApi::class.java)

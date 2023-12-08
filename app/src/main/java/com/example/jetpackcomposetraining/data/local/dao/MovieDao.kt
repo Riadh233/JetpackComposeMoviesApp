@@ -3,6 +3,7 @@ package com.example.jetpackcomposetraining.data.local.dao
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.jetpackcomposetraining.data.local.MovieEntity
@@ -10,7 +11,7 @@ import com.example.jetpackcomposetraining.data.local.MovieEntity
 
 @Dao
 interface MovieDao {
-    @Upsert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMovies(movies : List<MovieEntity>)
 
     @Query("SELECT * FROM movies_table WHERE isPopular = 0")

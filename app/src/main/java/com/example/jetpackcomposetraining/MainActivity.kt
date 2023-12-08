@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -43,6 +44,7 @@ import com.example.jetpackcomposetraining.ui.screens.TestScreen
 import com.example.jetpackcomposetraining.ui.theme.JetpackComposeTrainingTheme
 import com.example.jetpackcomposetraining.ui.viewmodels.MainViewModel
 import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
+import com.example.jetpackcomposetraining.ui.viewmodels.SearchMoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,9 +53,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel : MoviesViewModel by viewModels()
+
             JetpackComposeTrainingTheme {
-                MoviesApp()
+                val moviesViewModel : MoviesViewModel by viewModels()
+                MoviesApp(moviesViewModel = moviesViewModel)
             }
         }
     }
@@ -61,9 +64,8 @@ class MainActivity : ComponentActivity() {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MoviesApp() {
+fun MoviesApp(moviesViewModel : MoviesViewModel) {
     val viewModel = viewModel<MainViewModel>()
-    val moviesViewModel : MoviesViewModel = viewModel()
     val navController = rememberNavController()
     val items = listOf(Screen.MoviesScreen, Screen.AllMoviesScreen)
     val showBottomNavBar = mutableStateOf(true)
@@ -117,11 +119,11 @@ fun MoviesApp() {
                 }
             }
 
-        ) {
+        ) {innerPadding ->
             NavHost(
                 navController = navController,
                 startDestination = Screen.MoviesScreen.route,
-                modifier = Modifier
+                modifier = Modifier.padding(innerPadding)
             ) {
                 composable(Screen.MoviesScreen.route) {
                     MoviesScreen(mainViewModel = viewModel,moviesViewModel=moviesViewModel, navController = navController)

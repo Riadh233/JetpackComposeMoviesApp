@@ -17,9 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.jetpackcomposetraining.data.model.FakeMovie
+import com.example.jetpackcomposetraining.data.model.Movie
 
 @Composable
-fun RatingBar(modifier: Modifier, movie: FakeMovie) {
+fun RatingBar(modifier: Modifier, movie: Movie) {
     Row(
         modifier = Modifier.wrapContentWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -29,11 +30,11 @@ fun RatingBar(modifier: Modifier, movie: FakeMovie) {
             Icon(
                 imageVector = Icons.Filled.Star,
                 contentDescription = "Star",
-                tint = if (movie.rating > i) Color.Red else Color.White,
+                tint = if ((movie.rating / 2)> i) Color.Red else Color.White,
                 modifier = modifier
             )
         }
         Spacer(modifier = Modifier.width(3.dp))
-        Text(text = "(${movie.views})", fontSize = 12.sp, color = MaterialTheme.colorScheme.onBackground)
+        Text(text = "(${movie.popularity})", fontSize = 12.sp, color = MaterialTheme.colorScheme.onBackground)
     }
 }
