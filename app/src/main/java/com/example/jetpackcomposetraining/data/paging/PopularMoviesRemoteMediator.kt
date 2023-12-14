@@ -1,5 +1,6 @@
 package com.example.jetpackcomposetraining.data.paging
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -29,19 +30,16 @@ class PopularMoviesRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, MovieEntity>
     ): MediatorResult {
+        Log.d("tmdb remote mediator","triggered load method")
         return try {
             val currentPage = when(loadType){
                 LoadType.REFRESH -> {
-                    val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                    remoteKeys?.nextPage?.minus(1) ?: 1
-                }
+                    1
+            }
                 LoadType.PREPEND -> {
-                    val remoteKeys = getRemoteKeyForFirstItem(state)
-                    val prevPage = remoteKeys?.prevPage
-                        ?: return MediatorResult.Success(
-                            endOfPaginationReached = remoteKeys != null
+                     return MediatorResult.Success(
+                            endOfPaginationReached = false
                         )
-                    prevPage
                 }
                 LoadType.APPEND -> {
                     val remoteKeys = getRemoteKeyForLastItem(state)
@@ -67,7 +65,7 @@ class PopularMoviesRemoteMediator(
                     RemoteKeys(
                         id = movie.id,
                         prevPage = prevPage,
-                        nextPage = nextPage
+                        nextPage = nextPage,
                     )
                 }
                 val moviesList = response.results.map {movieDto ->

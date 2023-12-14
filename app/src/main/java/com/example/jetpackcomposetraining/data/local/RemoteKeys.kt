@@ -9,4 +9,4 @@ data class RemoteKeys(
     @PrimaryKey val id: Long,
     val prevPage: Int?,
     val nextPage: Int?
-)
+    )

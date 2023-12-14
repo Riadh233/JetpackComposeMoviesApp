@@ -5,6 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.example.jetpackcomposetraining.BuildConfig
 import com.example.jetpackcomposetraining.data.local.MovieDatabase
 import com.example.jetpackcomposetraining.data.local.MovieEntity
 import com.example.jetpackcomposetraining.data.local.RemoteKeys
@@ -50,7 +51,7 @@ class SearchMoviesRemoteMediator(
                     nextPage
                 }
             }
-            val response = moviesApi.searchMovies(page = currentPage, query = searchText)
+            val response = moviesApi.searchMovies(page = currentPage, query = searchText, apiKey = BuildConfig.API_KEY)
             val endOfPaginationReached = response.results.isEmpty()
 
             val prevPage = if (currentPage == 1) null else currentPage - 1

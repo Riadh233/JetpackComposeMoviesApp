@@ -12,6 +12,5 @@ class MoviesViewModel @Inject constructor(
    moviesRepository : MoviesRepository
 ) : ViewModel() {
     val allMovies = moviesRepository.getDiscoverMovies(53).cachedIn(viewModelScope)
-    val popularMovies = moviesRepository.getPopularMovies().cachedIn(viewModelScope)
 
 }

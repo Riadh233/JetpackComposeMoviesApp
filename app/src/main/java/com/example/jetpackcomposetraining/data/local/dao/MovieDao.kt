@@ -14,7 +14,7 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMovies(movies : List<MovieEntity>)
 
-    @Query("SELECT * FROM movies_table WHERE isPopular = 0")
+    @Query("SELECT * FROM movies_table WHERE isPopular = 0 ")
     fun getDiscoverMovies() : PagingSource<Int,MovieEntity>
 
     @Query("SELECT * FROM movies_table WHERE isPopular = 1")
@@ -23,7 +23,7 @@ interface MovieDao {
     @Query("SELECT * FROM movies_table WHERE id = :id")
     fun getMovieById(id : Long) : MovieEntity
 
-    @Query("SELECT * FROM movies_table WHERE title = :query")
+    @Query("SELECT * FROM movies_table WHERE title LIKE  :query")
     fun searchMovie(query : String) : PagingSource<Int,MovieEntity>
 
     @Query("DELETE FROM movies_table")

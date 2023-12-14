@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -36,6 +37,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.jetpackcomposetraining.navigation.Screen
 import com.example.jetpackcomposetraining.ui.screens.AllMoviesScreen
 import com.example.jetpackcomposetraining.ui.screens.DetailsScreen
@@ -55,7 +57,7 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             JetpackComposeTrainingTheme {
-                val moviesViewModel : MoviesViewModel by viewModels()
+                val moviesViewModel  = hiltViewModel<MoviesViewModel>()
                 MoviesApp(moviesViewModel = moviesViewModel)
             }
         }
@@ -69,6 +71,7 @@ fun MoviesApp(moviesViewModel : MoviesViewModel) {
     val navController = rememberNavController()
     val items = listOf(Screen.MoviesScreen, Screen.AllMoviesScreen)
     val showBottomNavBar = mutableStateOf(true)
+    val moviesList = moviesViewModel.allMovies.collectAsLazyPagingItems()
     Box(
         Modifier
             .fillMaxSize()
@@ -140,8 +143,9 @@ fun MoviesApp(moviesViewModel : MoviesViewModel) {
                     DetailsScreen(viewModel.getMovieById(itemId!!))
                     showBottomNavBar.value = false
                 }
+
                 composable(Screen.AllMoviesScreen.route) {
-                    AllMoviesScreen(navController, viewModel)
+                    AllMoviesScreen(navController, viewModel,moviesList)
                     showBottomNavBar.value = true
                 }
             }
