@@ -12,13 +12,14 @@ data class MovieDto(
     @Json(name = "popularity") val popularity : Float,
 )
 
-fun MovieDto.toMovieEntity() : MovieEntity {
+fun MovieDto.toMovieEntity(timestamp : Long) : MovieEntity {
     return MovieEntity(
         id = id,
         imageUrl = imageUrl,
         title = title,
         overview = overview,
         rating = rating,
+        timestamp = timestamp,
         popularity = popularity,
     )
 }

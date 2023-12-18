@@ -14,23 +14,21 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.jetpackcomposetraining.ui.viewmodels.MainViewModel
 import com.example.jetpackcomposetraining.R
+import com.example.jetpackcomposetraining.ui.viewmodels.SearchMoviesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(modifier: Modifier = Modifier,viewModel : MainViewModel){
-    val searchText by viewModel.searchText.collectAsState()
+fun SearchBar(modifier: Modifier = Modifier,viewModel : SearchMoviesViewModel){
+    val searchText = viewModel.searchQuery
     val isTrailingIconVisible = searchText.isNotBlank()
     OutlinedTextField(
         value = searchText,
-        onValueChange = viewModel::onSearchTextChanged,
+        onValueChange = viewModel::updateSearchQuery,
         modifier = modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceColorAtElevation(6.dp)),
         placeholder = { Text(text = "Search Movies", color = Color.LightGray) },
         leadingIcon = {
@@ -43,7 +41,7 @@ fun SearchBar(modifier: Modifier = Modifier,viewModel : MainViewModel){
         trailingIcon = {
             if (isTrailingIconVisible)
                 Icon(
-                    modifier = Modifier.clickable { viewModel.onSearchTextChanged("") },
+                    modifier = Modifier.clickable { viewModel.updateSearchQuery("") },
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(R.string.clear_search_text_icon),
                     tint = Color.LightGray

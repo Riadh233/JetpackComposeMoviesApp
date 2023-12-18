@@ -11,17 +11,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.isPopupLayout
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.jetpackcomposetraining.ui.viewmodels.MainViewModel
 import com.example.jetpackcomposetraining.R
-import com.example.jetpackcomposetraining.ui.components.ChipsList
 import com.example.jetpackcomposetraining.ui.components.ImageHeader
 import com.example.jetpackcomposetraining.ui.components.MoviesList
 import com.example.jetpackcomposetraining.ui.components.TopBar
@@ -31,10 +27,13 @@ import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
 fun MoviesScreen(
     modifier: Modifier = Modifier,
     moviesViewModel: MoviesViewModel,
-    mainViewModel: MainViewModel,
     navController: NavController
 ) {
-//    val discoverMoviesList = moviesViewModel.allMovies.collectAsLazyPagingItems()
+    val discoverMovies = moviesViewModel.allMovies.collectAsLazyPagingItems()
+    val popularMovies = moviesViewModel.popularMovies.collectAsLazyPagingItems()
+
+    Log.d("tmdb api","discover movies" + discoverMovies.itemCount.toString())
+    Log.d("tmdb api","popular movies" + popularMovies.itemCount.toString())
 
     Column(modifier = Modifier
         .padding(8.dp)
@@ -49,11 +48,11 @@ fun MoviesScreen(
             )
         )
         Spacer(modifier = modifier.height(16.dp))
-        ChipsList(viewModel = mainViewModel)
+//        ChipsList(viewModel = moviesViewModel)
         Spacer(modifier = modifier.height(16.dp))
 //        MoviesList(
 //            modifier = Modifier.size(height = 180.dp, width = 130.dp),
-//            moviesList = discoverMoviesList,
+//            moviesList = discoverMovies,
 //            navController = navController
 //        )
         Spacer(modifier = modifier.height(20.dp))
@@ -68,7 +67,7 @@ fun MoviesScreen(
         Spacer(modifier = modifier.height(8.dp))
 //        MoviesList(
 //            modifier = Modifier.size(height = 200.dp, width = 150.dp),
-//            moviesList = popularMoviesList,
+//            moviesList = popularMovies,
 //            navController = navController
 //        )
     }

@@ -16,6 +16,7 @@ data class MovieEntity(
     val overview : String,
     val rating : Float,
     val popularity : Float,
+    val timestamp : Long,
     var isPopular : Boolean = false
 )
 

@@ -32,16 +32,19 @@ class DiscoverMoviesRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, MovieEntity>
     ): MediatorResult {
-
+        Log.d("tmdb api ", "load fun called from discover")
         val page: Int = when (loadType) {
             LoadType.REFRESH -> {
-                1
+                val remoteKeys = getRemoteKeysClosestToCurrentPosition(state)
+                remoteKeys?.nextPage?.minus(1) ?: 1
             }
-
             LoadType.PREPEND -> {
-                return MediatorResult.Success(endOfPaginationReached = true)
+                val remoteKeys = getRemoteKeysForFirstItem(state)
+                val prevKey = remoteKeys?.prevPage ?: return MediatorResult.Success(
+                    endOfPaginationReached = remoteKeys != null
+                )
+                prevKey
             }
-
             LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeysForLastItem(state)
                 val endOfPagination = remoteKeys != null && remoteKeys.nextPage == null
@@ -58,7 +61,6 @@ class DiscoverMoviesRemoteMediator(
 
             val endOfPaginationReached = moviesResponse.isEmpty()
             moviesDatabase.withTransaction {
-
                 if (loadType == LoadType.REFRESH) {
                     moviesDao.deleteAllMovies()
                     remoteKeysDao.deleteAllRemoteKeys()
@@ -67,7 +69,11 @@ class DiscoverMoviesRemoteMediator(
                 val prevKey = if (page == 1) null else page - 1
                  val nextKey = if (endOfPaginationReached) null else page + 1
 
-                val movies = moviesResponse.map { it.toMovieEntity() }
+                val movies = moviesResponse.map {
+                    delay(1)
+                    it.toMovieEntity(System.currentTimeMillis())
+
+                }
                 val keys = moviesResponse.map { (id) -> RemoteKeys(id, prevKey, nextKey) }
                 moviesDao.addMovies(movies)
                 remoteKeysDao.addAllRemoteKeys(keys)

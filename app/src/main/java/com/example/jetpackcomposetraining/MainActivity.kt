@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,7 +43,6 @@ import com.example.jetpackcomposetraining.ui.screens.DetailsScreen
 import com.example.jetpackcomposetraining.ui.screens.MoviesScreen
 import com.example.jetpackcomposetraining.ui.screens.TestScreen
 import com.example.jetpackcomposetraining.ui.theme.JetpackComposeTrainingTheme
-import com.example.jetpackcomposetraining.ui.viewmodels.MainViewModel
 import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
 import com.example.jetpackcomposetraining.ui.viewmodels.SearchMoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,10 +53,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             JetpackComposeTrainingTheme {
-                val moviesViewModel  = hiltViewModel<MoviesViewModel>()
-                MoviesApp(moviesViewModel = moviesViewModel)
+                val moviesViewModel = hiltViewModel<MoviesViewModel>()
+                val searchViewModel = hiltViewModel<SearchMoviesViewModel>()
+                val navController = rememberNavController()
+                TestScreen(moviesViewModel = moviesViewModel, searchMoviesViewModel = searchViewModel, navController = navController )
             }
         }
     }
@@ -66,12 +65,12 @@ class MainActivity : ComponentActivity() {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MoviesApp(moviesViewModel : MoviesViewModel) {
-    val viewModel = viewModel<MainViewModel>()
+fun MoviesApp() {
+    val searchMoviesViewModel = hiltViewModel<SearchMoviesViewModel>()
+    val moviesViewModel = hiltViewModel<MoviesViewModel>()
     val navController = rememberNavController()
     val items = listOf(Screen.MoviesScreen, Screen.AllMoviesScreen)
     val showBottomNavBar = mutableStateOf(true)
-    val moviesList = moviesViewModel.allMovies.collectAsLazyPagingItems()
     Box(
         Modifier
             .fillMaxSize()
@@ -129,7 +128,7 @@ fun MoviesApp(moviesViewModel : MoviesViewModel) {
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(Screen.MoviesScreen.route) {
-                    MoviesScreen(mainViewModel = viewModel,moviesViewModel=moviesViewModel, navController = navController)
+                    MoviesScreen(moviesViewModel=moviesViewModel, navController = navController)
                     showBottomNavBar.value = true
                 }
                 composable(
@@ -140,12 +139,12 @@ fun MoviesApp(moviesViewModel : MoviesViewModel) {
                         }
                     )) {
                     val itemId = it.arguments?.getInt("itemId")
-                    DetailsScreen(viewModel.getMovieById(itemId!!))
+                    DetailsScreen(moviesViewModel.getMovieById(itemId!!))
                     showBottomNavBar.value = false
                 }
 
                 composable(Screen.AllMoviesScreen.route) {
-                    AllMoviesScreen(navController, viewModel,moviesList)
+                    AllMoviesScreen(navController, searchMoviesViewModel)
                     showBottomNavBar.value = true
                 }
             }

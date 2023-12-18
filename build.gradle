@@ -7,7 +7,7 @@ buildscript{
         paging_version = "3.2.1"
         room_version = "2.6.1"
         moshi_version = "1.14.0"
-        okhttp_version = "4.10.0"
+        okhttp_version = "5.0.0-alpha.3"
         lifecycle_version = "2.6.1"
         kotlin_version = "1.8.21"
         coil_version = "2.3.0"

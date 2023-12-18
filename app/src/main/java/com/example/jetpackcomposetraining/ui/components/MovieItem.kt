@@ -45,13 +45,15 @@ import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.jetpackcomposetraining.data.model.FakeMovie
 import com.example.jetpackcomposetraining.data.model.Movie
 import com.example.jetpackcomposetraining.navigation.Screen
 import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
+import com.example.jetpackcomposetraining.util.Constants.ITEMS_CONTENT_TYPE
 import com.example.jetpackcomposetraining.util.Constants.MOVIE_IMAGE_PATH
 import com.example.jetpackcomposetraining.util.isAppendError
 import com.example.jetpackcomposetraining.util.isAppendLoading
@@ -61,6 +63,7 @@ import com.example.jetpackcomposetraining.util.isRefreshEmpty
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun MovieGrid(moviesList: LazyPagingItems<Movie>, navController: NavController){
+    Log.d("tmdb api",moviesList.loadState.toString())
     LazyVerticalGrid(
         state = rememberLazyGridState(),
         columns = GridCells.Fixed(2),
@@ -70,8 +73,8 @@ fun MovieGrid(moviesList: LazyPagingItems<Movie>, navController: NavController){
     ) {
         items(
             count = moviesList.itemCount,
-            key = {index -> moviesList[index] ?: Math.random()},
-            contentType = {0}
+            key = moviesList.itemKey { it },
+            contentType = moviesList.itemContentType { ITEMS_CONTENT_TYPE }
         ) { index ->
             val movie = moviesList[index]
             if(movie != null)
@@ -85,27 +88,16 @@ fun MovieGrid(moviesList: LazyPagingItems<Movie>, navController: NavController){
 @Composable
 fun MoviesList(modifier: Modifier = Modifier, moviesList: LazyPagingItems<Movie>, navController: NavController){
     Log.d("tmdb api",moviesList.loadState.toString())
-
-     if(moviesList.isAppendError() || moviesList.isRefreshEmpty()) {
-         Box(modifier = modifier.fillMaxWidth()) {
-             IconButton(
-                 modifier = Modifier.align(Alignment.Center),
-                 onClick = { moviesList.refresh() }) {
-                 Icon(
-                     modifier = Modifier.size(28.dp),
-                     imageVector = Icons.Default.Refresh,
-                     contentDescription = "Refresh"
-                 )
-             }
-         }
-     }
          LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), state = rememberLazyListState()){
-             items(moviesList){movie ->
-                 if(movie != null){
-                     MovieItem(modifier = modifier,movie = movie, navController = navController)
-                 }else{
+             items(
+                 count = moviesList.itemCount,
+                 key = moviesList.itemKey { it },
+                 contentType = moviesList.itemContentType { ITEMS_CONTENT_TYPE }
+             ) { index ->
+                 val movie = moviesList[index]
+                 if(movie != null)
+                     MovieItem(modifier = modifier, movie = movie, navController = navController)
 
-                 }
              }
              item{
                  if(moviesList.isAppendLoading()){

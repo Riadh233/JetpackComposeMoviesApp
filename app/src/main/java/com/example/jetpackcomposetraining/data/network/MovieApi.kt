@@ -11,7 +11,7 @@ interface MovieApi {
         @Query("api_key") apiKey : String,
     ): MovieDtoPage
 
-    @GET("movie/popular")
+    @GET("movie/top_rated")
     suspend fun getPopularMovies(
         @Query("page") page: Int,
         @Query("per_page") perPage : Int,
@@ -21,6 +21,7 @@ interface MovieApi {
     @GET("search/movie")
     suspend fun searchMovies(
         @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
         @Query("query") query: String,
         @Query("api_key") apiKey : String
     ): MovieDtoPage
