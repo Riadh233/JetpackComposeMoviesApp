@@ -27,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -36,13 +35,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.jetpackcomposetraining.navigation.Screen
 import com.example.jetpackcomposetraining.ui.screens.AllMoviesScreen
 import com.example.jetpackcomposetraining.ui.screens.DetailsScreen
 import com.example.jetpackcomposetraining.ui.screens.MoviesScreen
-import com.example.jetpackcomposetraining.ui.screens.TestScreen
 import com.example.jetpackcomposetraining.ui.theme.JetpackComposeTrainingTheme
+import com.example.jetpackcomposetraining.ui.viewmodels.MovieDetailsViewModel
 import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
 import com.example.jetpackcomposetraining.ui.viewmodels.SearchMoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +55,7 @@ class MainActivity : ComponentActivity() {
                 val moviesViewModel = hiltViewModel<MoviesViewModel>()
                 val searchViewModel = hiltViewModel<SearchMoviesViewModel>()
                 val navController = rememberNavController()
-                TestScreen(moviesViewModel = moviesViewModel, searchMoviesViewModel = searchViewModel, navController = navController )
+                MoviesApp()
             }
         }
     }
@@ -68,6 +66,7 @@ class MainActivity : ComponentActivity() {
 fun MoviesApp() {
     val searchMoviesViewModel = hiltViewModel<SearchMoviesViewModel>()
     val moviesViewModel = hiltViewModel<MoviesViewModel>()
+    val detailsViewModel = hiltViewModel<MovieDetailsViewModel>()
     val navController = rememberNavController()
     val items = listOf(Screen.MoviesScreen, Screen.AllMoviesScreen)
     val showBottomNavBar = mutableStateOf(true)
@@ -135,11 +134,14 @@ fun MoviesApp() {
                     route = Screen.DetailsScreen.route + "/{itemId}",
                     arguments = listOf(
                         navArgument(name = "itemId") {
-                            type = NavType.IntType
+                            type = NavType.LongType
                         }
                     )) {
-                    val itemId = it.arguments?.getInt("itemId")
-                    DetailsScreen(moviesViewModel.getMovieById(itemId!!))
+                    val itemId = it.arguments?.getLong("itemId")
+                    if(itemId != null){
+                        detailsViewModel.getMovieById(itemId)
+                        DetailsScreen(detailsViewModel.movie)
+                    }
                     showBottomNavBar.value = false
                 }
 

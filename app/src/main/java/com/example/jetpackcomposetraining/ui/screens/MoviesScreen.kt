@@ -50,11 +50,11 @@ fun MoviesScreen(
         Spacer(modifier = modifier.height(16.dp))
 //        ChipsList(viewModel = moviesViewModel)
         Spacer(modifier = modifier.height(16.dp))
-//        MoviesList(
-//            modifier = Modifier.size(height = 180.dp, width = 130.dp),
-//            moviesList = discoverMovies,
-//            navController = navController
-//        )
+        MoviesList(
+            modifier = Modifier.size(height = 180.dp, width = 130.dp),
+            moviesList = discoverMovies,
+            navController = navController
+        )
         Spacer(modifier = modifier.height(20.dp))
         Text(
             text = "Popular Movies",
@@ -65,10 +65,10 @@ fun MoviesScreen(
 
         )
         Spacer(modifier = modifier.height(8.dp))
-//        MoviesList(
-//            modifier = Modifier.size(height = 200.dp, width = 150.dp),
-//            moviesList = popularMovies,
-//            navController = navController
-//        )
+        MoviesList(
+            modifier = Modifier.size(height = 200.dp, width = 150.dp),
+            moviesList = popularMovies,
+            navController = navController
+        )
     }
 }

@@ -15,8 +15,5 @@ class MoviesViewModel @Inject constructor(
     val allMovies = moviesRepository.getDiscoverMovies(53).cachedIn(viewModelScope)
     val popularMovies = moviesRepository.getPopularMovies().cachedIn(viewModelScope)
 
-    fun getMovieById(id : Int?) : FakeMovie{
-        TODO()
-    }
 
 }

@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -74,7 +75,9 @@ class MoviesRepositoryImpl @Inject constructor(
             .flowOn(dispatcherIO)
     }
 
-    override fun getMovieById(id: Long): Movie {
-        TODO("Not yet implemented")
+    override suspend fun getMovieById(id: Long): Movie {
+        return withContext(dispatcherIO){
+            moviesDatabase.movieDao().getMovieById(id).toDomainModel()
+        }
     }
 }

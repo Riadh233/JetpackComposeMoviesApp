@@ -26,6 +26,9 @@ interface MovieDao {
     @Query("SELECT * FROM movies_table WHERE title LIKE '%' || :query || '%' ORDER BY timestamp ASC")
     fun searchMovie(query : String) : PagingSource<Int,MovieEntity>
 
-    @Query("DELETE FROM movies_table")
-    fun deleteAllMovies()
+    @Query("DELETE FROM movies_table WHERE isPopular = 0")
+    fun deleteDiscoverMovies()
+
+    @Query("DELETE FROM movies_table WHERE isPopular = 1")
+    fun deletePopularMovies()
 }

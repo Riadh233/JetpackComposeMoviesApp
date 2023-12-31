@@ -66,7 +66,7 @@ class SearchMoviesRemoteMediator(
             Log.d("tmdb api","page $page, search text $searchText item count ${moviesResponse.size}")
             moviesDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    moviesDao.deleteAllMovies()
+                    moviesDao.deletePopularMovies()
                     remoteKeysDao.deleteAllRemoteKeys()
                 }
 

@@ -8,5 +8,5 @@ interface MoviesRepository {
      fun getDiscoverMovies(genre : Int) : Flow<PagingData<Movie>>
      fun getPopularMovies() : Flow<PagingData<Movie>>
      fun searchMovies(searchText : String) : Flow<PagingData<Movie>>
-     fun getMovieById(id:Long) : Movie
+     suspend fun getMovieById(id:Long) : Movie
 }

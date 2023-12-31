@@ -56,7 +56,7 @@ class SearchMoviesViewModel @Inject constructor(
     private fun searchMovies(query: String): Flow<PagingData<Movie>> =
         moviesRepository.searchMovies(query)
 
-    fun getAllMovies() : Flow<PagingData<Movie>> = moviesRepository.getPopularMovies()
+    private fun getAllMovies() : Flow<PagingData<Movie>> = moviesRepository.getPopularMovies()
     fun updateSearchQuery(query : String){
         searchQuery = query
     }

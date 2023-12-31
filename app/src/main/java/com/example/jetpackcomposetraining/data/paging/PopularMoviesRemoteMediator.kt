@@ -66,7 +66,7 @@ class PopularMoviesRemoteMediator(
             val endOfPaginationReached = moviesResponse.isEmpty()
             moviesDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    moviesDao.deleteAllMovies()
+                    moviesDao.deletePopularMovies()
                     remoteKeysDao.deleteAllRemoteKeys()
                 }
 

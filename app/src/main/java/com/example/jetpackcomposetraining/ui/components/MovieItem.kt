@@ -108,7 +108,8 @@ fun MoviesList(modifier: Modifier = Modifier, moviesList: LazyPagingItems<Movie>
      }
 
 @Composable
-fun MovieItem(modifier: Modifier = Modifier, movie: Movie, navController: NavController) {
+fun MovieItem(modifier: Modifier = Modifier, movie: Movie,
+              navController: NavController) {
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
