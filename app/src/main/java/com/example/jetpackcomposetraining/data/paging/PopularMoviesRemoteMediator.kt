@@ -12,12 +12,10 @@ import com.example.jetpackcomposetraining.data.local.MovieEntity
 import com.example.jetpackcomposetraining.data.local.RemoteKeys
 import com.example.jetpackcomposetraining.data.network.MovieApi
 import com.example.jetpackcomposetraining.data.network.toMovieEntity
-import com.example.jetpackcomposetraining.util.Constants
 import com.example.jetpackcomposetraining.util.Constants.ITEMS_PER_PAGE
 import kotlinx.coroutines.delay
 import retrofit2.HttpException
 import java.io.IOException
-import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 class PopularMoviesRemoteMediator(
@@ -75,7 +73,7 @@ class PopularMoviesRemoteMediator(
 
                 val movies = moviesResponse.map {
                     delay(1)
-                    it.toMovieEntity(System.currentTimeMillis())
+                    it.toMovieEntity(System.currentTimeMillis(),null)
                 }
                 movies.forEach {
                     it.isPopular = true

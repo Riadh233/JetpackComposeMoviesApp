@@ -1,7 +1,6 @@
 package com.example.jetpackcomposetraining.data.paging
 
 import android.util.Log
-import androidx.compose.runtime.currentComposer
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -71,8 +70,7 @@ class DiscoverMoviesRemoteMediator(
 
                 val movies = moviesResponse.map {
                     delay(1)
-                    it.toMovieEntity(System.currentTimeMillis())
-
+                    it.toMovieEntity(System.currentTimeMillis(),null)
                 }
                 val keys = moviesResponse.map { (id) -> RemoteKeys(id, prevKey, nextKey) }
                 moviesDao.addMovies(movies)

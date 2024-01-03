@@ -7,19 +7,28 @@ import com.example.jetpackcomposetraining.data.network.Crew
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 class CreditsConverter {
+    private val moshi: Moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
     @TypeConverter
-    fun fromString(value: String): Credits {
-        val type = Types.newParameterizedType(Credits::class.java, List::class.java, Cast::class.java, Crew::class.java)
-        val adapter: JsonAdapter<Credits> = Moshi.Builder().build().adapter(type)
-        return adapter.fromJson(value) ?: Credits()
+    fun creditsToJson(credits: Credits?): String? {
+        return credits?.let {
+            val type = Types.newParameterizedType(Credits::class.java)
+            val adapter = moshi.adapter<Credits>(type)
+            adapter.toJson(credits)
+        }
     }
 
     @TypeConverter
-    fun toString(value: Credits): String {
-        val type = Types.newParameterizedType(Credits::class.java, List::class.java, Cast::class.java, Crew::class.java)
-        val adapter: JsonAdapter<Credits> = Moshi.Builder().build().adapter(type)
-        return adapter.toJson(value)
+    fun jsonToCredits(json: String?): Credits? {
+        return json?.let {
+            val type = Types.newParameterizedType(Credits::class.java)
+            val adapter = moshi.adapter<Credits>(type)
+            adapter.fromJson(json)
+        }
     }
 }

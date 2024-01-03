@@ -1,6 +1,7 @@
 package com.example.jetpackcomposetraining.data.network
 
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieApi {
@@ -25,5 +26,11 @@ interface MovieApi {
         @Query("query") query: String,
         @Query("api_key") apiKey : String
     ): MovieDtoPage
+
+    @GET("movie/{id}/credits")
+    suspend fun getMovieCredits(
+        @Path("id") id: Long,
+        @Query("api_key") apiKey : String
+    ): Credits
 
 }

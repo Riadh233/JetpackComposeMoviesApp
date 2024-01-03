@@ -1,6 +1,5 @@
 package com.example.jetpackcomposetraining.data.local
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.jetpackcomposetraining.data.model.Movie
@@ -17,7 +16,8 @@ data class MovieEntity(
     val rating : Float,
     val popularity : Float,
     val timestamp : Long,
-    var isPopular : Boolean = false
+    var isPopular : Boolean = false,
+    val credits : Credits ?= null
 )
 
 fun MovieEntity.toDomainModel() : Movie {

@@ -75,7 +75,7 @@ class SearchMoviesRemoteMediator(
 
                 val movies = moviesResponse.map {
                     delay(1)
-                    it.toMovieEntity(System.currentTimeMillis())
+                    it.toMovieEntity(System.currentTimeMillis(),null)
                 }
                 val keys = moviesResponse.map { (id) -> RemoteKeys(id, prevKey, nextKey) }
                 moviesDao.addMovies(movies)
