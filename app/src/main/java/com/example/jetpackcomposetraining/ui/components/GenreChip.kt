@@ -19,51 +19,52 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.jetpackcomposetraining.util.getAllMovieGenres
-//
-//@Composable
-//fun ChipsList(viewModel: MainViewModel) {
-//    val moviesGenres = getAllMovieGenres()
-//    val selectedGenre = viewModel.selectedGenre.value
-//    LazyRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-//        items(moviesGenres) { genre ->
-//            val isSelected = genre == selectedGenre
-//            GenreChip(genre, isSelected , viewModel::onSelectedGenreChanged)
-//        }
-//    }
-//}
-//
-//@OptIn(ExperimentalMaterialApi::class)
-//@Composable
-//fun GenreChip(genre : String,
-//              isSelected : Boolean,
-//              onSelectedGenreChanged : (String) -> Unit,
-//              ){
-//    val transition =
-//        updateTransition(targetState = isSelected, label = "Category Selection Transition")
-//
-//    val backgroundColor by transition.animateColor(label = "Background Color Animation") { isCurrentlySelected ->
-//        if (isCurrentlySelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
-//    }
-//
-//    val textColor by transition.animateColor(label = "Text Color Animation") { isCurrentlySelected ->
-//        if (isCurrentlySelected) MaterialTheme.colorScheme.onSurface else Color.LightGray
-//    }
-//    Chip(
-//        onClick = {
-//            onSelectedGenreChanged(genre) },
-//        shape = RoundedCornerShape(8.dp),
-//        colors = ChipDefaults.chipColors(backgroundColor = backgroundColor),
-//    ){
-//        Text(
-//            text = genre,
-//            color = textColor,
-//            modifier = Modifier.padding(vertical = 12.dp, horizontal = 12.dp)
-//        )
-//    }
-//}
-//@Preview
-//@Composable
-//fun ChipOverview(){
-//
-//}
+import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
+import com.example.jetpackcomposetraining.util.Constants.getAllGenres
+
+@Composable
+fun ChipsList(viewModel: MoviesViewModel) {
+    val moviesGenres = getAllGenres()
+    val selectedGenre = viewModel.selectedGenre
+    LazyRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        items(moviesGenres) { genre ->
+            val isSelected = genre == selectedGenre
+            GenreChip(genre, isSelected , viewModel::onSelectedGenreChanged)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun GenreChip(genre : String,
+              isSelected : Boolean,
+              onSelectedGenreChanged : (String) -> Unit,
+              ){
+    val transition =
+        updateTransition(targetState = isSelected, label = "Category Selection Transition")
+
+    val backgroundColor by transition.animateColor(label = "Background Color Animation") { isCurrentlySelected ->
+        if (isCurrentlySelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
+    }
+
+    val textColor by transition.animateColor(label = "Text Color Animation") { isCurrentlySelected ->
+        if (isCurrentlySelected) MaterialTheme.colorScheme.onSurface else Color.LightGray
+    }
+    Chip(
+        onClick = {
+            onSelectedGenreChanged(genre) },
+        shape = RoundedCornerShape(8.dp),
+        colors = ChipDefaults.chipColors(backgroundColor = backgroundColor),
+    ){
+        Text(
+            text = genre,
+            color = textColor,
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 12.dp)
+        )
+    }
+}
+@Preview
+@Composable
+fun ChipOverview(){
+
+}

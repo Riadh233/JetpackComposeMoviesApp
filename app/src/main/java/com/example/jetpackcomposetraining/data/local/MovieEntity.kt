@@ -3,7 +3,8 @@ package com.example.jetpackcomposetraining.data.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.jetpackcomposetraining.data.model.Movie
-import com.example.jetpackcomposetraining.data.network.Credits
+import com.example.jetpackcomposetraining.data.network.Cast
+import com.example.jetpackcomposetraining.data.network.Crew
 import com.example.jetpackcomposetraining.util.Constants.MOVIES_ENTITY
 
 
@@ -17,7 +18,9 @@ data class MovieEntity(
     val popularity : Float,
     val timestamp : Long,
     var isPopular : Boolean = false,
-    val credits : Credits ?= null
+    val genreList : List<Int>,
+    val cast : List<Cast>,
+    val crew : List<Crew>
 )
 
 fun MovieEntity.toDomainModel() : Movie {
@@ -28,5 +31,8 @@ fun MovieEntity.toDomainModel() : Movie {
         overview = overview,
         rating = rating,
         popularity = popularity,
+        genreList = genreList,
+        cast = cast,
+        crew = crew
     )
 }

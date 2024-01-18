@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.jetpackcomposetraining.data.model.FakeMovie
 import com.example.jetpackcomposetraining.data.model.Movie
 
 @Composable
@@ -30,11 +29,21 @@ fun RatingBar(modifier: Modifier, movie: Movie) {
             Icon(
                 imageVector = Icons.Filled.Star,
                 contentDescription = "Star",
-                tint = if ((movie.rating / 2)> i) Color.Red else Color.White,
+                tint = if ((customRound(movie.rating / 2)) > i) Color.Red else Color.White,
                 modifier = modifier
             )
         }
         Spacer(modifier = Modifier.width(3.dp))
-        Text(text = "(${movie.popularity})", fontSize = 12.sp, color = MaterialTheme.colorScheme.onBackground)
+        Text(text = "(${movie.rating})", fontSize = 12.sp, color = MaterialTheme.colorScheme.onBackground)
+    }
+}
+fun customRound(number: Float): Int {
+    val integerPart = number.toInt()
+    val decimalPart = number - integerPart
+
+    return if (decimalPart < 0.5) {
+        kotlin.math.floor(number).toInt()
+    } else {
+        kotlin.math.ceil(number).toInt()
     }
 }

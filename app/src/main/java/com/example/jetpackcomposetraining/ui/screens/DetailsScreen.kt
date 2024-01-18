@@ -1,7 +1,7 @@
 package com.example.jetpackcomposetraining.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,10 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,19 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.jetpackcomposetraining.R
 import com.example.jetpackcomposetraining.data.model.Movie
+import com.example.jetpackcomposetraining.ui.components.RatingBar
 import com.example.jetpackcomposetraining.util.Constants
 import com.webtoonscorp.android.readmore.foundation.ReadMoreTextOverflow
 import com.webtoonscorp.android.readmore.foundation.ToggleArea
@@ -56,7 +53,8 @@ fun DetailsScreen(movieFlow: StateFlow<Movie?>) {
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(bottom = 3.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
@@ -78,7 +76,7 @@ fun DetailsScreen(movieFlow: StateFlow<Movie?>) {
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(60.dp)
+                        .wrapContentHeight()
                         .align(Alignment.BottomCenter)
                         .background(
                             Brush.verticalGradient(
@@ -94,17 +92,44 @@ fun DetailsScreen(movieFlow: StateFlow<Movie?>) {
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.align(Alignment.Bottom),
                         color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 40.sp
                     )
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
-//        RatingBar(modifier = Modifier.size(24.dp), movie = currentMovie)
+            RatingBar(modifier = Modifier.size(24.dp), movie = movie)
             Spacer(modifier = Modifier.height(16.dp))
             MovieSummary(movie)
             Spacer(modifier = Modifier.height(16.dp))
-
+            Text(
+                text = "Stars",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Red,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)){
+                items(movie.cast.size){index ->
+                    val castMember = movie.cast[index]
+                    CreditsItem(name = castMember.name ?: "", imageUrl = castMember.profileImage ?: "")
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Crew",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Red,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)){
+                items(movie.crew.size){index ->
+                    val crewMember = movie.crew[index]
+                    CreditsItem(name = crewMember.name ?: "", imageUrl = crewMember .profileImage ?: "")
+                }
+            }
         }
-
     }
 }
 
@@ -122,7 +147,7 @@ fun MovieSummary(currentMovie: Movie) {
     ReadMoreText(
         text = currentMovie.overview,
         color = MaterialTheme.colorScheme.onBackground,
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         expanded = expanded,
         onExpandedChange = onExpandedChange,
         modifier = Modifier.width(260.dp),
@@ -136,44 +161,30 @@ fun MovieSummary(currentMovie: Movie) {
         readLessFontSize = 15.sp,
         toggleArea = ToggleArea.More,
     )
-    Spacer(modifier = Modifier.height(16.dp))
-    Text(
-        text = "Director: ${currentMovie.title}",
-        fontSize = 24.sp,
-        fontWeight = FontWeight.Bold,
-        fontFamily = FontFamily.SansSerif,
-        color = MaterialTheme.colorScheme.onBackground,
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    Text(
-        text = "Stars",
-        fontSize = 15.sp,
-        fontWeight = FontWeight.Bold,
-        color = Color.Red,
-    )
-    Text(
-        text = currentMovie.title,
-        fontSize = 14.sp,
-        color = MaterialTheme.colorScheme.onBackground,
-    )
 }
 @Composable
 fun CreditsItem(name : String,imageUrl : String){
-   Column {
+   Column(horizontalAlignment = Alignment.CenterHorizontally) {
        AsyncImage(
            model = ImageRequest.Builder(LocalContext.current).data(Constants.MOVIE_IMAGE_PATH + imageUrl)
                .crossfade(true)
                .build(),
            contentDescription = name,
            modifier = Modifier
-               .fillMaxSize()
+               .size(65.dp, 65.dp)
+               .border(width = 1.dp, color = Color.Red, shape = CircleShape)
                .clip(CircleShape),
            contentScale = ContentScale.FillBounds
        )
-       Text(
-           text = name,
-           color = MaterialTheme.colorScheme.onSurface,
-           )
+       val parts = name.split(" ", limit = 2)
+       val firstName = if (parts.isNotEmpty()) parts[0] else ""
+       val lastName = if (parts.size > 1) parts[1] else ""
+       Column(horizontalAlignment = Alignment.CenterHorizontally) {
+           Text(text = firstName)
+           if (lastName.isNotEmpty()) {
+               Text(text = lastName)
+           }
+       }
    }
 }
 

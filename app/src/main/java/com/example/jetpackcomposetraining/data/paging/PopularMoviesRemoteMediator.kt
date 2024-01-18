@@ -60,7 +60,9 @@ class PopularMoviesRemoteMediator(
         return try {
             val response = moviesApi.getPopularMovies(page = page, perPage = ITEMS_PER_PAGE,apiKey = BuildConfig.API_KEY)
             val moviesResponse = response.results
-
+            val moviesWithCredits = moviesResponse.map {
+                moviesApi.getMovieWithCredits(it.id,BuildConfig.API_KEY)
+            }
             val endOfPaginationReached = moviesResponse.isEmpty()
             moviesDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -71,9 +73,15 @@ class PopularMoviesRemoteMediator(
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
 
-                val movies = moviesResponse.map {
+                val movies = moviesWithCredits.map { movie ->
+                    val castList = movie.credits.cast.filter { castMember ->
+                        castMember.profileImage != null
+                    }.distinctBy { it.name }
+                    val crewList = movie.credits.crew.filter { crewMember ->
+                        crewMember.profileImage != null
+                    }.distinctBy { it.name }
                     delay(1)
-                    it.toMovieEntity(System.currentTimeMillis(),null)
+                    movie.toMovieEntity(System.currentTimeMillis(),castList,crewList)
                 }
                 movies.forEach {
                     it.isPopular = true

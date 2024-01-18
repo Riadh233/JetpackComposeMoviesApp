@@ -9,6 +9,7 @@ interface MovieApi {
     suspend fun getAllMovies(
         @Query("page") page: Int,
         @Query("per_page") perPage : Int,
+        @Query("with_genres") selectedGenre : String,
         @Query("api_key") apiKey : String,
     ): MovieDtoPage
 
@@ -21,16 +22,15 @@ interface MovieApi {
 
     @GET("search/movie")
     suspend fun searchMovies(
-        @Query("page") page: Int,
-        @Query("per_page") perPage: Int,
         @Query("query") query: String,
         @Query("api_key") apiKey : String
     ): MovieDtoPage
 
-    @GET("movie/{id}/credits")
-    suspend fun getMovieCredits(
-        @Path("id") id: Long,
-        @Query("api_key") apiKey : String
-    ): Credits
+    @GET("movie/{id}")
+    suspend fun getMovieWithCredits(
+        @Path("id") movieId: Long,
+        @Query("api_key") apiKey: String,
+        @Query("append_to_response") appendToResponse: String = "credits"
+    ): MovieDto
 
 }

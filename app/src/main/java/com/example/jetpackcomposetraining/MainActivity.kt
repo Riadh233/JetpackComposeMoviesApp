@@ -6,22 +6,32 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -35,6 +45,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.jetpackcomposetraining.navigation.Screen
 import com.example.jetpackcomposetraining.ui.screens.AllMoviesScreen
 import com.example.jetpackcomposetraining.ui.screens.DetailsScreen
@@ -44,6 +55,7 @@ import com.example.jetpackcomposetraining.ui.viewmodels.MovieDetailsViewModel
 import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
 import com.example.jetpackcomposetraining.ui.viewmodels.SearchMoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -52,9 +64,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             JetpackComposeTrainingTheme {
-                val moviesViewModel = hiltViewModel<MoviesViewModel>()
-                val searchViewModel = hiltViewModel<SearchMoviesViewModel>()
-                val navController = rememberNavController()
                 MoviesApp()
             }
         }
@@ -70,6 +79,8 @@ fun MoviesApp() {
     val navController = rememberNavController()
     val items = listOf(Screen.MoviesScreen, Screen.AllMoviesScreen)
     val showBottomNavBar = mutableStateOf(true)
+    val snackBarHostState = remember{ SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     Box(
         Modifier
             .fillMaxSize()
@@ -77,6 +88,7 @@ fun MoviesApp() {
     ) {
         Scaffold(
             modifier = Modifier,
+            snackbarHost = { CustomSnackBarHost(snackBarHostState = snackBarHostState) },
             bottomBar = {
                 if (showBottomNavBar.value) {
                     Log.d(
@@ -127,7 +139,16 @@ fun MoviesApp() {
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(Screen.MoviesScreen.route) {
-                    MoviesScreen(moviesViewModel=moviesViewModel, navController = navController)
+                    MoviesScreen(
+                        moviesViewModel = moviesViewModel,
+                        navController = navController,
+                        onShowSnackBar = { message ->
+                            coroutineScope.launch {
+                                Log.d("tmdb api","show snack bar")
+                                snackBarHostState.showSnackbar(message)
+                            }
+                        }
+                    )
                     showBottomNavBar.value = true
                 }
                 composable(
@@ -146,12 +167,44 @@ fun MoviesApp() {
                 }
 
                 composable(Screen.AllMoviesScreen.route) {
-                    AllMoviesScreen(navController, searchMoviesViewModel)
+                    AllMoviesScreen(
+                        navController = navController,
+                        searchResults = searchMoviesViewModel.searchResults.collectAsLazyPagingItems(),
+                        searchText = searchMoviesViewModel.searchQuery,
+                        updateSearchQuery = searchMoviesViewModel::updateSearchQuery
+                    )
                     showBottomNavBar.value = true
                 }
             }
         }
     }
+}
+
+@Composable
+fun CustomSnackBarHost(
+    snackBarHostState: SnackbarHostState,
+) {
+    SnackbarHost(
+        hostState = snackBarHostState,
+        modifier = Modifier.padding(8.dp),
+        snackbar = {data ->
+            Snackbar(
+                modifier = Modifier.padding(8.dp),
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Warning,
+                        contentDescription = data.message,
+                        tint = Color.Red
+                    )
+                    Text(text = data.message, color = Color.White)
+                }
+            }
+        }
+    )
 }
 
 

@@ -41,15 +41,18 @@ class SearchMoviesViewModel @Inject constructor(
         private set
 
     @OptIn(FlowPreview::class)
-    val searchQueryFlow = snapshotFlow { searchQuery }.debounce(500).conflate()
+    val searchQueryFlow = snapshotFlow { searchQuery.trim() }.debounce(500).conflate()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val searchResults: Flow<PagingData<Movie>> =
         searchQueryFlow.flatMapLatest { text ->
             if(text.isBlank()){
                 getAllMovies()
-            }else
-                searchMovies(text)
+            }else{
+                val result = searchMovies(text)
+                Log.d("search query",text)
+                result
+            }
             }.distinctUntilChanged().cachedIn(viewModelScope)
 
 

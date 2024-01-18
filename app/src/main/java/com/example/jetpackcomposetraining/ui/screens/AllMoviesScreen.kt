@@ -11,23 +11,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.jetpackcomposetraining.data.model.Movie
 import com.example.jetpackcomposetraining.ui.components.MovieGrid
 import com.example.jetpackcomposetraining.ui.components.SearchBar
-import com.example.jetpackcomposetraining.ui.viewmodels.SearchMoviesViewModel
 
 @Composable
-fun AllMoviesScreen(navController : NavController , viewModel : SearchMoviesViewModel){
-    val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
-    Log.d("tmdb api",searchResults.loadState.toString())
-    Log.d("tmdb api","list count " + searchResults.itemCount )
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(8.dp)) {
+fun AllMoviesScreen(
+    navController: NavController,
+    searchResults: LazyPagingItems<Movie>,
+    searchText: String,
+    updateSearchQuery: (String) -> Unit
+) {
+    Log.d("tmdb api", searchResults.loadState.toString())
+    Log.d("tmdb api", "list count " + searchResults.itemCount)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
         Spacer(modifier = Modifier.height(4.dp))
-        SearchBar(viewModel = viewModel)
+        SearchBar(searchText = searchText, updateSearchQuery = updateSearchQuery)
         Spacer(modifier = Modifier.height(16.dp))
-        MovieGrid(moviesList = searchResults,navController = navController)
+
+        MovieGrid(moviesList = searchResults, navController = navController)
     }
 }

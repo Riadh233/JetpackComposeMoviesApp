@@ -14,10 +14,11 @@ import com.example.jetpackcomposetraining.data.network.MovieApi
 import com.example.jetpackcomposetraining.data.paging.DiscoverMoviesRemoteMediator
 import com.example.jetpackcomposetraining.data.paging.PopularMoviesRemoteMediator
 import com.example.jetpackcomposetraining.data.paging.SearchMoviesRemoteMediator
+import com.example.jetpackcomposetraining.util.Constants
+import com.example.jetpackcomposetraining.util.Constants.ALL_MOVIES
 import com.example.jetpackcomposetraining.util.Constants.ITEMS_PER_PAGE
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -31,14 +32,32 @@ class MoviesRepositoryImpl @Inject constructor(
     private val dispatcherIO : CoroutineDispatcher
 ) : MoviesRepository {
     @OptIn(ExperimentalPagingApi::class)
-    override fun getDiscoverMovies(genre : Int): Flow<PagingData<Movie>> {
-        val pagingSourceFactory = { moviesDatabase.movieDao().getDiscoverMovies() }
+    override fun getDiscoverMovies(): Flow<PagingData<Movie>> {
+        val pagingSourceFactory = {moviesDatabase.movieDao().getDiscoverMovies() }
 
         return Pager(
             config = PagingConfig(pageSize = ITEMS_PER_PAGE),
             remoteMediator = DiscoverMoviesRemoteMediator(
                 moviesApi = moviesApi,
                 moviesDatabase = moviesDatabase,
+                selectedGenre = ""
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow.map { pagingData ->
+            pagingData.map(MovieEntity::toDomainModel) }.flowOn(dispatcherIO)
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    override fun getMoviesWithSelectedGenre(genre : Int): Flow<PagingData<Movie>> {
+        Log.d("genre selected", "$genre")
+        val pagingSourceFactory = {moviesDatabase.movieDao().getMoviesWithGenre(genre) }
+
+        return Pager(
+            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
+            remoteMediator = DiscoverMoviesRemoteMediator(
+                moviesApi = moviesApi,
+                moviesDatabase = moviesDatabase,
+                selectedGenre = genre.toString()
             ),
             pagingSourceFactory = pagingSourceFactory
         ).flow.map { pagingData ->

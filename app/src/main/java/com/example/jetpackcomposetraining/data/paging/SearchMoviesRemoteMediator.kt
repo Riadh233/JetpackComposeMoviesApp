@@ -59,8 +59,11 @@ class SearchMoviesRemoteMediator(
             }
         }
         return try {
-            val response = moviesApi.searchMovies(page = page, perPage = ITEMS_PER_PAGE, query = searchText, apiKey = BuildConfig.API_KEY)
+            val response = moviesApi.searchMovies(query = searchText, apiKey = BuildConfig.API_KEY)
             val moviesResponse = response.results
+            val moviesWithCredits = moviesResponse.map {
+                moviesApi.getMovieWithCredits(it.id,BuildConfig.API_KEY)
+            }
 
             val endOfPaginationReached = moviesResponse.isEmpty()
             Log.d("tmdb api","page $page, search text $searchText item count ${moviesResponse.size}")
@@ -73,9 +76,15 @@ class SearchMoviesRemoteMediator(
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
 
-                val movies = moviesResponse.map {
+                val movies = moviesWithCredits.map { movie ->
+                    val castList = movie.credits.cast.filter { castMember ->
+                        castMember.profileImage != null
+                    }.distinctBy { it.name }
+                    val crewList = movie.credits.crew.filter { crewMember ->
+                        crewMember.profileImage != null
+                    }.distinctBy { it.name }
                     delay(1)
-                    it.toMovieEntity(System.currentTimeMillis(),null)
+                    movie.toMovieEntity(System.currentTimeMillis(),castList,crewList)
                 }
                 val keys = moviesResponse.map { (id) -> RemoteKeys(id, prevKey, nextKey) }
                 moviesDao.addMovies(movies)

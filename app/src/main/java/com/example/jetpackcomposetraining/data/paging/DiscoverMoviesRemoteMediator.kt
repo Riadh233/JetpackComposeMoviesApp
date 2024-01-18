@@ -20,6 +20,8 @@ import java.io.IOException
 class DiscoverMoviesRemoteMediator(
     private val moviesApi: MovieApi,
     private val moviesDatabase: MovieDatabase,
+    private val selectedGenre : String
+
 ) : RemoteMediator<Int, MovieEntity>() {
     private val moviesDao = moviesDatabase.movieDao()
     private val remoteKeysDao = moviesDatabase.remoteKeysDao()
@@ -55,8 +57,12 @@ class DiscoverMoviesRemoteMediator(
             }
         }
         return try {
-            val response = moviesApi.getAllMovies(page, 20, BuildConfig.API_KEY)
+            val response = moviesApi.getAllMovies(page = page, perPage = 20,selectedGenre = selectedGenre,apiKey = BuildConfig.API_KEY)
             val moviesResponse = response.results
+            val moviesWithCredits = moviesResponse.map {
+                moviesApi.getMovieWithCredits(it.id,BuildConfig.API_KEY)
+            }
+            Log.d("tmdb api credits response","$moviesWithCredits")
 
             val endOfPaginationReached = moviesResponse.isEmpty()
             moviesDatabase.withTransaction {
@@ -66,11 +72,18 @@ class DiscoverMoviesRemoteMediator(
                 }
 
                 val prevKey = if (page == 1) null else page - 1
-                 val nextKey = if (endOfPaginationReached) null else page + 1
+                val nextKey = if (endOfPaginationReached) null else page + 1
 
-                val movies = moviesResponse.map {
+                val movies = moviesWithCredits.map { movie ->
+                    val castList = movie.credits.cast.filter { castMember ->
+                        castMember.profileImage != null
+                    }.distinctBy { it.name }
+                    val crewList = movie.credits.crew.filter { crewMember ->
+                        crewMember.profileImage != null
+                    }.distinctBy { it.name }
+
                     delay(1)
-                    it.toMovieEntity(System.currentTimeMillis(),null)
+                    movie.toMovieEntity(System.currentTimeMillis(),castList,crewList)
                 }
                 val keys = moviesResponse.map { (id) -> RemoteKeys(id, prevKey, nextKey) }
                 moviesDao.addMovies(movies)

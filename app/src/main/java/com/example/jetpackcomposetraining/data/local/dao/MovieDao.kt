@@ -14,6 +14,9 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMovies(movies : List<MovieEntity>)
 
+    @Query("SELECT * FROM movies_table WHERE isPopular = 0 AND genreList LIKE '%' || :genre || '%' ORDER BY timestamp ASC")
+    fun getMoviesWithGenre(genre : Int) : PagingSource<Int,MovieEntity>
+
     @Query("SELECT * FROM movies_table WHERE isPopular = 0 ORDER BY timestamp ASC")
     fun getDiscoverMovies() : PagingSource<Int,MovieEntity>
 
