@@ -1,6 +1,9 @@
 package com.example.jetpackcomposetraining.ui.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcomposetraining.data.model.Movie
@@ -16,13 +19,13 @@ class MovieDetailsViewModel @Inject constructor(
     private val moviesRepository: MoviesRepository
 ) : ViewModel() {
 
-    private val _movie = MutableStateFlow<Movie?>(null)
-    val movie: StateFlow<Movie?> = _movie
+    var movie by mutableStateOf<Movie?>(null)
+        private set
 
     fun getMovieById(id: Long) {
         viewModelScope.launch {
                 val fetchedMovie = moviesRepository.getMovieById(id)
-                _movie.value = fetchedMovie
+                movie = fetchedMovie
                 Log.d("detail screen", fetchedMovie.title)
         }
     }

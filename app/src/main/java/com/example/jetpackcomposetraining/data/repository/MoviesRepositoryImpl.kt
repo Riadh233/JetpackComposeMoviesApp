@@ -49,19 +49,20 @@ class MoviesRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     override fun getMoviesWithSelectedGenre(genre : Int): Flow<PagingData<Movie>> {
-        Log.d("genre selected", "$genre")
-        val pagingSourceFactory = {moviesDatabase.movieDao().getMoviesWithGenre(genre) }
-
-        return Pager(
-            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
-            remoteMediator = DiscoverMoviesRemoteMediator(
-                moviesApi = moviesApi,
-                moviesDatabase = moviesDatabase,
-                selectedGenre = genre.toString()
-            ),
-            pagingSourceFactory = pagingSourceFactory
-        ).flow.map { pagingData ->
-            pagingData.map(MovieEntity::toDomainModel) }.flowOn(dispatcherIO)
+        TODO()
+//        Log.d("genre selected", "$genre")
+//        val pagingSourceFactory = {moviesDatabase.movieDao().getMoviesWithGenre(genre) }
+//
+//        return Pager(
+//            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
+//            remoteMediator = DiscoverMoviesRemoteMediator(
+//                moviesApi = moviesApi,
+//                moviesDatabase = moviesDatabase,
+//                selectedGenre = genre.toString()
+//            ),
+//            pagingSourceFactory = pagingSourceFactory
+//        ).flow.map { pagingData ->
+//            pagingData.map(MovieEntity::toDomainModel) }.flowOn(dispatcherIO)
     }
     @OptIn(ExperimentalPagingApi::class)
     override fun getPopularMovies(): Flow<PagingData<Movie>> {
@@ -83,7 +84,7 @@ class MoviesRepositoryImpl @Inject constructor(
         val pagingSourceFactory = { moviesDatabase.movieDao().searchMovie(searchText) }
 
         return Pager(
-            config = PagingConfig(pageSize = ITEMS_PER_PAGE,prefetchDistance = 5),
+            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
             remoteMediator = SearchMoviesRemoteMediator(
                 moviesApi = moviesApi,
                 moviesDatabase = moviesDatabase,

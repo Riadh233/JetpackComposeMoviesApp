@@ -25,20 +25,20 @@ class MoviesViewModel @Inject constructor(
 ) : ViewModel() {
 
     val popularMovies = moviesRepository.getPopularMovies().cachedIn(viewModelScope)
+    val allMoviesFlow = moviesRepository.getDiscoverMovies().cachedIn(viewModelScope)
     var selectedGenre by mutableStateOf("All")
         private set
 
     private val selectedGenreFlow = snapshotFlow { selectedGenre }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val allMoviesFlow: Flow<PagingData<Movie>> =
-        selectedGenreFlow.flatMapLatest { genre ->
-            if (getGenreId(genre) == ALL_MOVIES)
-                moviesRepository.getDiscoverMovies()
-            else{
-                moviesRepository.getMoviesWithSelectedGenre(getGenreId(genre))
-            }
-        }.distinctUntilChanged().cachedIn(viewModelScope)
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    val allMoviesFlow: Flow<PagingData<Movie>> =
+//        selectedGenreFlow.flatMapLatest { genre ->
+//            if (getGenreId(genre) == ALL_MOVIES)
+//            else{
+//                moviesRepository.getMoviesWithSelectedGenre(getGenreId(genre))
+//            }
+//        }.distinctUntilChanged().cachedIn(viewModelScope)
 
     fun onSelectedGenreChanged(genre: String) {
         selectedGenre = genre

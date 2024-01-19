@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,16 +30,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -62,8 +69,20 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             JetpackComposeTrainingTheme {
+                val dispatcher = LocalOnBackPressedDispatcherOwner.current
+                    ?.onBackPressedDispatcher
+                val callback = remember {
+                    object : OnBackPressedCallback(true) {
+                        override fun handleOnBackPressed() {
+                            Log.d("back pressed","pressed")
+                        }
+                    }
+                }
+                dispatcher?.addCallback(callback)
+                callback.isEnabled = true
                 MoviesApp()
             }
         }
@@ -81,6 +100,8 @@ fun MoviesApp() {
     val showBottomNavBar = mutableStateOf(true)
     val snackBarHostState = remember{ SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+
+
     Box(
         Modifier
             .fillMaxSize()
@@ -136,7 +157,8 @@ fun MoviesApp() {
             NavHost(
                 navController = navController,
                 startDestination = Screen.MoviesScreen.route,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+
             ) {
                 composable(Screen.MoviesScreen.route) {
                     MoviesScreen(
@@ -161,7 +183,7 @@ fun MoviesApp() {
                     val itemId = it.arguments?.getLong("itemId")
                     if(itemId != null){
                         detailsViewModel.getMovieById(itemId)
-                        DetailsScreen(detailsViewModel.movie)
+                        DetailsScreen(detailsViewModel.movie,navController)
                     }
                     showBottomNavBar.value = false
                 }
@@ -205,6 +227,30 @@ fun CustomSnackBarHost(
             }
         }
     )
+}
+@Composable
+fun BackButtonHandler(
+    navController: NavController
+) {
+    val context = LocalContext.current
+
+    val backCallbackHandler = rememberUpdatedState(
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("back pressed","pressed")
+                navController.navigateUp()
+            }
+        }
+    )
+
+    val dispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    DisposableEffect(context) {
+        dispatcher?.addCallback(backCallbackHandler.value)
+
+        onDispose {
+            backCallbackHandler.value.remove()
+        }
+    }
 }
 
 

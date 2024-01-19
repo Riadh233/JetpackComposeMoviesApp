@@ -1,5 +1,6 @@
 package com.example.jetpackcomposetraining.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +41,8 @@ fun MoviesScreen(
 ) {
     val discoverMovies = moviesViewModel.allMoviesFlow.collectAsLazyPagingItems()
     val popularMovies = moviesViewModel.popularMovies.collectAsLazyPagingItems()
+
+    Log.d("laod state discover movies",discoverMovies.loadState.toString())
 
     LaunchedEffect(discoverMovies.isAppendError()){
         if(discoverMovies.isAppendError()){

@@ -9,7 +9,6 @@ interface MovieApi {
     suspend fun getAllMovies(
         @Query("page") page: Int,
         @Query("per_page") perPage : Int,
-        @Query("with_genres") selectedGenre : String,
         @Query("api_key") apiKey : String,
     ): MovieDtoPage
 

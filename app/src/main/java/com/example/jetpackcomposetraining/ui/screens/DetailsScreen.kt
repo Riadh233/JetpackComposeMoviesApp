@@ -1,5 +1,7 @@
 package com.example.jetpackcomposetraining.ui.screens
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.jetpackcomposetraining.data.model.Movie
@@ -46,9 +49,13 @@ import com.webtoonscorp.android.readmore.material3.ReadMoreText
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun DetailsScreen(movieFlow: StateFlow<Movie?>) {
+fun DetailsScreen(movie: Movie?,navController: NavController) {
     val scrollState = rememberScrollState()
-    val movie = movieFlow.collectAsState().value
+
+    BackHandler(enabled = true) {
+        Log.d("back pressed","pressed")
+        navController.navigateUp()
+    }
     if(movie != null){
         Column(
             modifier = Modifier

@@ -57,7 +57,7 @@ class DiscoverMoviesRemoteMediator(
             }
         }
         return try {
-            val response = moviesApi.getAllMovies(page = page, perPage = 20,selectedGenre = selectedGenre,apiKey = BuildConfig.API_KEY)
+            val response = moviesApi.getAllMovies(page = page, perPage = 20,apiKey = BuildConfig.API_KEY)
             val moviesResponse = response.results
             val moviesWithCredits = moviesResponse.map {
                 moviesApi.getMovieWithCredits(it.id,BuildConfig.API_KEY)
