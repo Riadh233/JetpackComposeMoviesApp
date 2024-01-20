@@ -70,7 +70,7 @@ fun MovieGrid(moviesList: LazyPagingItems<Movie>, navController: NavController){
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(6.dp),
-                onRetryClicked = { moviesList.refresh() }, error = moviesList.refreshError().error
+                onRetryClicked = { moviesList.refresh() }, error = moviesList.refreshError()?.error
             )
         }else{
             if(moviesList.isRefreshSuccess()){
@@ -122,7 +122,7 @@ fun MoviesList(
         ErrorLayout(
             modifier = Modifier
                 .padding(6.dp),
-            onRetryClicked = { moviesList.refresh() }, error = moviesList.refreshError().error )
+            onRetryClicked = { moviesList.refresh() }, error = moviesList.refreshError()?.error )
     }else{
         if(moviesList.isRefreshSuccess()) {
             LazyRow(
@@ -193,12 +193,12 @@ fun IsAppendLayout(modifier : Modifier = Modifier,
 fun ErrorLayout(
     modifier: Modifier = Modifier,
     onRetryClicked: () -> Unit,
-    error: Throwable
+    error: Throwable?
 ){
     val message = when(error){
         is SocketTimeoutException, is UnknownHostException -> "Internet Unavailable"
         is HttpException -> "Server Error"
-        else -> "Unknown Error"
+        else -> "Connection Problem"
     }
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(modifier = modifier,text = message, textAlign = TextAlign.Center)

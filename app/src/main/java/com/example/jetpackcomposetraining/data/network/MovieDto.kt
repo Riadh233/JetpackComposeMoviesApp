@@ -10,11 +10,11 @@ data class MovieDto(
     @Json(name = "overview") val overview : String,
     @Json(name = "vote_average") val rating : Float,
     @Json(name = "popularity") val popularity : Float,
-//    @Json(name= "genres") val genreList : List<Genre>,
+    @Json(name= "genres") val genreList : List<Genre>,
     @Json(name = "credits") val credits : Credits,
 )
 data class Genre(
-    @Json(name = "id") val genreId : Int
+    @Json(name = "name") val name : String
 )
 
 fun MovieDto.toMovieEntity(timestamp: Long,cast : List<Cast>,crew : List<Crew>,listType : Int) : MovieEntity {
@@ -26,6 +26,7 @@ fun MovieDto.toMovieEntity(timestamp: Long,cast : List<Cast>,crew : List<Crew>,l
         rating = rating,
         timestamp = timestamp,
         popularity = popularity,
+        genreList = genreList.map { it.name },
         cast = cast,
         crew = crew,
         listType = listType

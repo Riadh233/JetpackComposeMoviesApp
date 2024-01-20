@@ -27,4 +27,11 @@ fun LazyPagingItems<Movie>.appendError(): LoadState.Error =
     (loadState.mediator?.append as? LoadState.Error)
         ?: (loadState.mediator?.refresh as LoadState.Error)
 
-fun LazyPagingItems<Movie>.refreshError(): LoadState.Error = (loadState.refresh as LoadState.Error)
+fun LazyPagingItems<Movie>.refreshError(): LoadState.Error? {
+    val refreshState = loadState.refresh
+    return if (refreshState is LoadState.Error) {
+        refreshState
+    } else {
+        null
+    }
+}

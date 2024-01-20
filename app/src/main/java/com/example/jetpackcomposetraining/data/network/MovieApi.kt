@@ -9,6 +9,8 @@ interface MovieApi {
     suspend fun getAllMovies(
         @Query("page") page: Int,
         @Query("per_page") perPage : Int,
+        @Query("with_genres") selectedGenre : String,
+        @Query("include_adult") include_adult : Boolean = false,
         @Query("api_key") apiKey : String,
     ): MovieDtoPage
 
@@ -16,6 +18,7 @@ interface MovieApi {
     suspend fun getPopularMovies(
         @Query("page") page: Int,
         @Query("per_page") perPage : Int,
+        @Query("include_adult") include_adult : Boolean = false,
         @Query("api_key") apiKey : String
     ): MovieDtoPage
 
@@ -23,6 +26,7 @@ interface MovieApi {
     suspend fun getLatestMovies(
         @Query("page") page: Int,
         @Query("per_page") perPage : Int,
+        @Query("include_adult") include_adult : Boolean = false,
         @Query("api_key") apiKey : String
     ): MovieDtoPage
 
@@ -31,6 +35,7 @@ interface MovieApi {
         @Query("page") page: Int,
         @Query("per_page") perPage : Int,
         @Query("query") query: String,
+        @Query("include_adult") include_adult : Boolean = false,
         @Query("api_key") apiKey : String
     ): MovieDtoPage
 

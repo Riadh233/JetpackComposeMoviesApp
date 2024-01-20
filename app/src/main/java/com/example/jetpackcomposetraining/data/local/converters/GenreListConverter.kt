@@ -4,12 +4,12 @@ import androidx.room.TypeConverter
 
 class GenreListConverter {
     @TypeConverter
-    fun fromString(value: String): List<Int> {
-        return value.split(",").map { it.toInt() }
+    fun fromString(value: String): List<String> {
+        return value.split(",").map { it }
     }
 
     @TypeConverter
-    fun fromList(list: List<Int>): String {
+    fun fromList(list: List<String>): String {
         return list.joinToString(",")
     }
 }

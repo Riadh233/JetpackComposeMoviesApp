@@ -50,7 +50,7 @@ fun MoviesScreen(
             val message = when (discoverMovies.appendError().error) {
                 is UnknownHostException -> "Internet Unavailable"
                 is SocketTimeoutException -> "Internet Slow"
-                else -> "Unknown Error"
+                else -> "Connection Problem"
             }
             onShowSnackBar(message)
         }
@@ -69,7 +69,7 @@ fun MoviesScreen(
             )
         )
         Spacer(modifier = modifier.height(16.dp))
-       // ChipsList(viewModel = moviesViewModel)
+        ChipsList(viewModel = moviesViewModel)
         Spacer(modifier = modifier.height(16.dp))
 
         Box(modifier = Modifier

@@ -20,11 +20,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.jetpackcomposetraining.ui.viewmodels.MoviesViewModel
-import com.example.jetpackcomposetraining.util.Constants.getAllGenres
+import com.example.jetpackcomposetraining.util.Constants.MOVIE_GENRES
 
 @Composable
 fun ChipsList(viewModel: MoviesViewModel) {
-    val moviesGenres = getAllGenres()
+    val moviesGenres = MOVIE_GENRES
     val selectedGenre = viewModel.selectedGenre
     LazyRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         items(moviesGenres) { genre ->

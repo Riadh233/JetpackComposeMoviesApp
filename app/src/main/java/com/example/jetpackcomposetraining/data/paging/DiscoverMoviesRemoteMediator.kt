@@ -12,6 +12,7 @@ import com.example.jetpackcomposetraining.data.local.MovieEntity
 import com.example.jetpackcomposetraining.data.local.RemoteKeys
 import com.example.jetpackcomposetraining.data.network.MovieApi
 import com.example.jetpackcomposetraining.data.network.toMovieEntity
+import com.example.jetpackcomposetraining.util.Constants.ITEMS_PER_PAGE
 import kotlinx.coroutines.delay
 import retrofit2.HttpException
 import java.io.IOException
@@ -57,7 +58,7 @@ class DiscoverMoviesRemoteMediator(
             }
         }
         return try {
-            val response = moviesApi.getAllMovies(page = page, perPage = 20,apiKey = BuildConfig.API_KEY)
+            val response = moviesApi.getAllMovies(page = page, perPage = ITEMS_PER_PAGE,selectedGenre = selectedGenre,apiKey = BuildConfig.API_KEY)
             val moviesResponse = response.results
             val moviesWithCredits = moviesResponse.map {
                 moviesApi.getMovieWithCredits(it.id,BuildConfig.API_KEY)
