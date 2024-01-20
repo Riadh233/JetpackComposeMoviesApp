@@ -42,7 +42,8 @@ fun MoviesScreen(
     val discoverMovies = moviesViewModel.allMoviesFlow.collectAsLazyPagingItems()
     val popularMovies = moviesViewModel.popularMovies.collectAsLazyPagingItems()
 
-    Log.d("laod state discover movies",discoverMovies.loadState.toString())
+    Log.d("load state discover movies",discoverMovies.loadState.toString())
+    Log.d("load state popular movies",popularMovies.loadState.toString())
 
     LaunchedEffect(discoverMovies.isAppendError()){
         if(discoverMovies.isAppendError()){
@@ -68,7 +69,7 @@ fun MoviesScreen(
             )
         )
         Spacer(modifier = modifier.height(16.dp))
-        ChipsList(viewModel = moviesViewModel)
+       // ChipsList(viewModel = moviesViewModel)
         Spacer(modifier = modifier.height(16.dp))
 
         Box(modifier = Modifier

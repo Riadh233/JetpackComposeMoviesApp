@@ -46,14 +46,8 @@ class SearchMoviesViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val searchResults: Flow<PagingData<Movie>> =
         searchQueryFlow.flatMapLatest { text ->
-            if(text.isBlank()){
-                getAllMovies()
-            }else{
-                val result = searchMovies(text)
-                Log.d("search query",text)
-                result
-            }
-            }.distinctUntilChanged().cachedIn(viewModelScope)
+            searchMovies(text)
+        }.distinctUntilChanged().cachedIn(viewModelScope)
 
 
     private fun searchMovies(query: String): Flow<PagingData<Movie>> =

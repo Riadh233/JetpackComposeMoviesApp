@@ -17,8 +17,8 @@ data class MovieEntity(
     val rating : Float,
     val popularity : Float,
     val timestamp : Long,
-    var isPopular : Boolean = false,
-    val genreList : List<Int>,
+    var listType : Int = 0,
+//    val genreList : List<Int>,
     val cast : List<Cast>,
     val crew : List<Crew>
 )
@@ -31,7 +31,7 @@ fun MovieEntity.toDomainModel() : Movie {
         overview = overview,
         rating = rating,
         popularity = popularity,
-        genreList = genreList,
+//        genreList = genreList,
         cast = cast,
         crew = crew
     )

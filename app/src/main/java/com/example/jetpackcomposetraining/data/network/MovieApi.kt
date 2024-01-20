@@ -19,8 +19,17 @@ interface MovieApi {
         @Query("api_key") apiKey : String
     ): MovieDtoPage
 
+    @GET("movie/now_playing")
+    suspend fun getLatestMovies(
+        @Query("page") page: Int,
+        @Query("per_page") perPage : Int,
+        @Query("api_key") apiKey : String
+    ): MovieDtoPage
+
     @GET("search/movie")
     suspend fun searchMovies(
+        @Query("page") page: Int,
+        @Query("per_page") perPage : Int,
         @Query("query") query: String,
         @Query("api_key") apiKey : String
     ): MovieDtoPage

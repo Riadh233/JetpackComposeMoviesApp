@@ -81,7 +81,13 @@ class MoviesRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     override fun searchMovies(searchText : String): Flow<PagingData<Movie>> {
-        val pagingSourceFactory = { moviesDatabase.movieDao().searchMovie(searchText) }
+        val pagingSourceFactory = {
+            if (searchText.isBlank()) {
+                moviesDatabase.movieDao().getLatestMovies()
+            } else {
+                moviesDatabase.movieDao().searchMovie(searchText)
+            }
+        }
 
         return Pager(
             config = PagingConfig(pageSize = ITEMS_PER_PAGE),

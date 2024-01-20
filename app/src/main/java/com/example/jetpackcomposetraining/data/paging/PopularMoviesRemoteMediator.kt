@@ -81,10 +81,7 @@ class PopularMoviesRemoteMediator(
                         crewMember.profileImage != null
                     }.distinctBy { it.name }
                     delay(1)
-                    movie.toMovieEntity(System.currentTimeMillis(),castList,crewList)
-                }
-                movies.forEach {
-                    it.isPopular = true
+                    movie.toMovieEntity(System.currentTimeMillis(),castList,crewList, listType = 1)
                 }
 
                 val keys = moviesResponse.map { (id) -> RemoteKeys(id, prevKey, nextKey) }

@@ -72,17 +72,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             JetpackComposeTrainingTheme {
-                val dispatcher = LocalOnBackPressedDispatcherOwner.current
-                    ?.onBackPressedDispatcher
-                val callback = remember {
-                    object : OnBackPressedCallback(true) {
-                        override fun handleOnBackPressed() {
-                            Log.d("back pressed","pressed")
-                        }
-                    }
-                }
-                dispatcher?.addCallback(callback)
-                callback.isEnabled = true
                 MoviesApp()
             }
         }
@@ -112,10 +101,6 @@ fun MoviesApp() {
             snackbarHost = { CustomSnackBarHost(snackBarHostState = snackBarHostState) },
             bottomBar = {
                 if (showBottomNavBar.value) {
-                    Log.d(
-                        "bottom bar",
-                        "current destination : ${navController.currentDestination?.route}"
-                    )
                     BottomNavigation(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -166,7 +151,6 @@ fun MoviesApp() {
                         navController = navController,
                         onShowSnackBar = { message ->
                             coroutineScope.launch {
-                                Log.d("tmdb api","show snack bar")
                                 snackBarHostState.showSnackbar(message)
                             }
                         }

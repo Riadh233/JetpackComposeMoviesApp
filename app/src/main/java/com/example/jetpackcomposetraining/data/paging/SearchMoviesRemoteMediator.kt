@@ -59,7 +59,20 @@ class SearchMoviesRemoteMediator(
             }
         }
         return try {
-            val response = moviesApi.searchMovies(query = searchText, apiKey = BuildConfig.API_KEY)
+            val response = if (searchText.isBlank()) {
+                moviesApi.getLatestMovies(
+                    page = page,
+                    perPage = ITEMS_PER_PAGE,
+                    apiKey = BuildConfig.API_KEY
+                )
+            } else {
+                moviesApi.searchMovies(
+                    page = page,
+                    perPage = ITEMS_PER_PAGE,
+                    query = searchText,
+                    apiKey = BuildConfig.API_KEY
+                )
+            }
             val moviesResponse = response.results
             val moviesWithCredits = moviesResponse.map {
                 moviesApi.getMovieWithCredits(it.id,BuildConfig.API_KEY)
@@ -69,8 +82,7 @@ class SearchMoviesRemoteMediator(
             Log.d("tmdb api","page $page, search text $searchText item count ${moviesResponse.size}")
             moviesDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    moviesDao.deletePopularMovies()
-                    remoteKeysDao.deleteAllRemoteKeys()
+                    moviesDao.deleteLatestMovies()
                 }
 
                 val prevKey = if (page == 1) null else page - 1
@@ -84,9 +96,10 @@ class SearchMoviesRemoteMediator(
                         crewMember.profileImage != null
                     }.distinctBy { it.name }
                     delay(1)
-                    movie.toMovieEntity(System.currentTimeMillis(),castList,crewList)
+                    movie.toMovieEntity(System.currentTimeMillis(),castList,crewList, listType = 2)
                 }
-                val keys = moviesResponse.map { (id) -> RemoteKeys(id, prevKey, nextKey) }
+                val keys = moviesResponse.map { (id) -> RemoteKeys(id = id , prevPage = prevKey, nextPage = nextKey) }
+
                 moviesDao.addMovies(movies)
                 remoteKeysDao.addAllRemoteKeys(keys)
                 MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

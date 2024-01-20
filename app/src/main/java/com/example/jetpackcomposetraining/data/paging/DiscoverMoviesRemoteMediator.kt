@@ -83,7 +83,7 @@ class DiscoverMoviesRemoteMediator(
                     }.distinctBy { it.name }
 
                     delay(1)
-                    movie.toMovieEntity(System.currentTimeMillis(),castList,crewList)
+                    movie.toMovieEntity(System.currentTimeMillis(),castList,crewList,listType = 0)
                 }
                 val keys = moviesResponse.map { (id) -> RemoteKeys(id, prevKey, nextKey) }
                 moviesDao.addMovies(movies)

@@ -16,7 +16,7 @@ data class Movie(
     val rating : Float,
     val popularity : Float,
     val isPopular : Boolean = false,
-    val genreList : List<Int>,
+//    val genreList : List<Int>,
     val cast : List<@RawValue Cast>,
     val crew : List<@RawValue Crew>
 ) : Parcelable
