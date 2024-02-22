@@ -10,8 +10,6 @@ The Jetpack Compose Movies App is designed following a modular and scalable arch
 
   
    ## Architecture 
-   * The architecture used to create this app is Model-View-Viewmodel, it seperated the app into Data 
-    layer/Domain/Ui Layer resulting in a readable,robust code. It also leverages the power of some android jetpack 
-    libraries (Retrofit, Coroutines, Hilt, Lifecycle, Room).
+This app uses the Clean Architecture with Model-View-ViewModel (MVVM) design pattern, separating the app into Data, Domain, and UI layers, resulting in testable, maintainable, and flexible code. It leverages the power of Android Jetpack libraries like Retrofit for network calls, Coroutines for asynchronous operations, Hilt for dependency injection, Lifecycle for managing data across lifecycles, and Room for local data storage.
 
   
