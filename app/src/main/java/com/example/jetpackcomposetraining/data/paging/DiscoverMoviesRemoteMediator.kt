@@ -112,8 +112,8 @@ class DiscoverMoviesRemoteMediator(
 
     private suspend fun getRemoteKeysClosestToCurrentPosition(state: PagingState<Int, MovieEntity>): RemoteKeys? {
         return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.id?.let { bookId ->
-                remoteKeysDao.getRemoteKeys(bookId)
+            state.closestItemToPosition(position)?.id?.let { Id ->
+                remoteKeysDao.getRemoteKeys(Id)
             }
         }
     }
