@@ -9,7 +9,18 @@ The Jetpack Compose Movies App is designed following a modular and scalable arch
  <div>
 
   
-   ## Architecture 
-This app uses the Clean Architecture with Model-View-ViewModel (MVVM) design pattern, separating the app into Data, Domain, and UI layers, resulting in testable, maintainable, and flexible code. It leverages the power of Android Jetpack libraries like Retrofit for network calls, Coroutines for asynchronous operations, Hilt for dependency injection, Lifecycle for managing data across lifecycles, and Room for local data storage.
+# Architecutre
+- This app uses MVVM and flows [Guide to app architecture](https://developer.android.com/topic/architecture)
 
-  
+# Tools and Libraries
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose/tutorial)
+- [Navigation components with compose](https://developer.android.com/develop/ui/compose/navigation)
+- [Dependency Injection With Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
+- [Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle)
+- [Paging3 Library](https://developer.android.com/topic/libraries/architecture/paging/v3-overview)
+- [Kotlin coroutines](https://developer.android.com/kotlin/coroutines)
+- [Room Library](https://developer.android.com/training/data-storage/room)
+- [Retrofit](https://square.github.io/retrofit/)
+- [Moshi](https://github.com/square/moshi)
+- [OKHttp](https://square.github.io/okhttp/)
+- [Coil](https://coil-kt.github.io/coil/)
